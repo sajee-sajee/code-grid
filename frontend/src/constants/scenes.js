@@ -3,18 +3,20 @@ export const SCENES = {
         id: 0,
         title: "GLOBAL NETWORK BREACH",
         bgColor: "linear-gradient(180deg, #000510 0%, #001828 40%, #000a14 100%)",
+        bgImage: "/scenes/scene0_bg.png",
         bgEmoji: "🌃",
         bgAnim: "sceneBgPanLeft 7s ease-in-out infinite alternate",
+        fgImage: "/scenes/scene0_fg.png",
         fgEmoji: "💻",
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
         accentColor: "#00d4ff",
         glowColor: "rgba(0,212,255,0.3)",
         particles: ["⬡", "◈", "◉", "▣", "◫"],
         lines: [
-            "Global network instability detected...",
-            "AI systems have taken control of critical infrastructure.",
-            "The Coders Guild is searching for new recruits.",
-            "You have been selected.",
+            "A vast cyberpunk megacity looms in deep navy dusk.",
+            "A massive wireframe globe in electric cyan casts its shadow.",
+            "AI systems have seized the cracked server nodes.",
+            "The Coders Guild calls... You have been selected.",
         ],
     },
     1: {
@@ -29,9 +31,10 @@ export const SCENES = {
         glowColor: "rgba(0,255,65,0.3)",
         particles: ["[0]", "[1]", "[2]", "[3]", "[4]", "[n]"],
         lines: [
-            "Training simulation initialized.",
-            "Every hacker begins with ordered data structures.",
-            "Master the arrays to stabilize the system.",
+            "Welcome to the brutalist Training Arena.",
+            "Matrix green binary cascades down pitted concrete walls.",
+            "Master the ordered floating data blocks to construct the Array.",
+            "Your training begins now.",
         ],
     },
     2: {
@@ -46,9 +49,10 @@ export const SCENES = {
         glowColor: "rgba(0,212,255,0.3)",
         particles: ["str", "abc", "XOR", "#%@", "</>", "==="],
         lines: [
-            "Communication grid compromised.",
-            "Encrypted transmissions flood the network.",
-            "Decode the strings to restore communication.",
+            "You enter a narrow night market alley thick with neon smog.",
+            "Corrupted text fragments glow in electric cyan above.",
+            "The chaotic string streams block further transmission.",
+            "Decode the text fragments to restore communication.",
         ],
     },
     3: {
@@ -63,9 +67,10 @@ export const SCENES = {
         glowColor: "rgba(191,0,255,0.3)",
         particles: ["f(n)", "f(n-1)", "f(n-2)", "∞", "↺", "..."],
         lines: [
-            "Recursive anomaly detected.",
-            "A system process is trapped in an infinite loop.",
-            "Break the recursion to restore stability.",
+            "An impossible laboratory shifting with vertiginous depth.",
+            "A system process is trapped on a glowing Möbius strip.",
+            "Fractal circuit patterns echo endlessly in violet light.",
+            "Find the base case and break the infinite loop.",
         ],
     },
     4: {
@@ -80,9 +85,10 @@ export const SCENES = {
         glowColor: "rgba(255,204,0,0.3)",
         particles: ["key", "hash", "{}", "O(1)", "map", "set"],
         lines: [
-            "Identity database corrupted.",
-            "Citizens are disappearing from the system.",
-            "Restore the records using hashing.",
+            "Infinite data pillars stretch into an amber-lit abyss.",
+            "Keys drift through the dark like translucent golden sparks.",
+            "Crucial identity records have been lost in the dark bins.",
+            "Wield the golden master key to restore the mappings.",
         ],
     },
     5: {
@@ -97,9 +103,10 @@ export const SCENES = {
         glowColor: "rgba(255,102,0,0.3)",
         particles: ["push", "pop", "LIFO", "top", "peek", "[]"],
         lines: [
-            "Security archives accessed.",
-            "Layers of system logs hide the breach.",
-            "Process them one by one.",
+            "A massive industrial megastructure tower reaches the burnt sky.",
+            "Glowing orange safety lights cast sweeping downward shadows.",
+            "Corrupted logs are layered in heavy dark metal plates.",
+            "You must systematically PUSH and POP your way through.",
         ],
     },
     6: {
@@ -114,9 +121,10 @@ export const SCENES = {
         glowColor: "rgba(0,255,204,0.3)",
         particles: ["enq", "deq", "FIFO", "head", "tail", "→"],
         lines: [
-            "Data traffic overload detected.",
-            "Packets must move in precise order.",
-            "Restore the queue system.",
+            "A sleek transit shape trails teal light from a dark tunnel mouth.",
+            "Data packet boxes pile up chaotically on the platform.",
+            "Incoming commands are stalled in a massive backlog.",
+            "Organize them in a precise FIFO line to clear the transit.",
         ],
     },
     7: {
@@ -131,9 +139,10 @@ export const SCENES = {
         glowColor: "rgba(255,102,204,0.3)",
         particles: ["→", "null", "node", "next", "prev", "●"],
         lines: [
-            "Core network fractured.",
-            "Nodes have lost their connections.",
-            "Rebuild the data chains.",
+            "A cityscape web of glowing hot-pink energy cables spans aloft.",
+            "Severed connections dangle, sparking against the deep purple sky.",
+            "Isolated memory fragments float aimlessly below.",
+            "Rebuild the chain by forging the correct 'next' links.",
         ],
     },
     8: {
@@ -148,9 +157,10 @@ export const SCENES = {
         glowColor: "rgba(102,255,102,0.3)",
         particles: ["O(n²)", "O(nlogn)", "swap", "merge", "pivot", "sort"],
         lines: [
-            "Data chaos detected.",
-            "Processing systems overloaded.",
-            "Sort the datasets before failure.",
+            "Cavernous machinery hums beneath acid lime green lights.",
+            "Block containers pile chaotically on massive conveyor belts.",
+            "The central sorting processor threatens to overload.",
+            "Execute efficient data swaps to restore perfect order.",
         ],
     },
     9: {
@@ -165,9 +175,10 @@ export const SCENES = {
         glowColor: "rgba(255,170,0,0.3)",
         particles: ["lo", "hi", "mid", "log₂", "÷2", "✓"],
         lines: [
-            "Target program detected.",
-            "Narrowing search space.",
-            "Locate the rogue system.",
+            "Endless dark filing monoliths recede into an amber-lit vanishing point.",
+            "A solitary golden searchlight sweeps the central structures.",
+            "The rogue system element is hidden deep within a billion ranks.",
+            "Divide the space, shift your bounds, and locate the target.",
         ],
     },
     10: {
@@ -182,9 +193,10 @@ export const SCENES = {
         glowColor: "rgba(0,170,255,0.3)",
         particles: ["root", "left", "right", "BFS", "DFS", "depth"],
         lines: [
-            "AI control hierarchy detected.",
-            "Subsystems branching endlessly.",
-            "Navigate the structure.",
+            "You arrive at a massive central root tower pulsing electric blue.",
+            "Avenues branch left and right, repeating into an intricate hierarchy.",
+            "Subsystems are buried deep in the far leaves of the dark network.",
+            "Traverse the branches to reach the critical terminal.",
         ],
     },
     11: {
@@ -199,9 +211,10 @@ export const SCENES = {
         glowColor: "rgba(255,51,102,0.3)",
         particles: ["V", "E", "BFS", "DFS", "∞", "NEXUS"],
         lines: [
-            "Core AI detected.",
-            "Every system connects here.",
-            "Break the network to defeat the AI.",
+            "The final fortress-citadel. Skies burn with deep crimson storms.",
+            "Blazing red energy beams crisscross, locking every node to the Nexus.",
+            "The central vertex radiates pure malignant AI consciousness.",
+            "Navigate the graph, sever the edges, and pull the plug.",
         ],
     },
 };
