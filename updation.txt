@@ -1,4 +1,0 @@
-this project in developing state.
-and maded changes in the typescript file for compiling the project.
-next stage is to integrating ci/cd pipeline.
-pipeline updated using CI/CD
