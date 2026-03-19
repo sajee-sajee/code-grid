@@ -99,7 +99,18 @@ export default function CinematicScene({ sceneId, onSkip }) {
             ))}
             <div style={{ position: "absolute", inset: 0, zIndex: 5, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                 {scene.fgImage ? (
-                    <img src={scene.fgImage} style={{ height: "60vh", maxHeight: "800px", objectFit: "contain", animation: scene.fgAnim, filter: `drop-shadow(0 0 20px ${scene.accentColor}44)` }} alt="foreground" />
+                    <img
+                        src={scene.fgImage}
+                        style={{
+                            height: "60vh",
+                            maxHeight: "800px",
+                            objectFit: "contain",
+                            animation: scene.fgAnim,
+                            filter: `drop-shadow(0 0 20px ${scene.accentColor}44)`,
+                            ...scene.fgStyle,
+                        }}
+                        alt="foreground"
+                    />
                 ) : (
                     <div style={{ fontSize: "min(20vw, 22vh)", opacity: 0.22, animation: scene.fgAnim, filter: `drop-shadow(0 0 40px ${scene.accentColor})` }}>
                         {scene.fgEmoji}
@@ -110,7 +121,7 @@ export default function CinematicScene({ sceneId, onSkip }) {
                 <div style={{ fontFamily: "'Orbitron', monospace", fontSize: "clamp(11px,1.8vw,16px)", fontWeight: 700, letterSpacing: ".35em", color: scene.accentColor, textShadow: `0 0 20px ${scene.accentColor}, 0 0 40px ${scene.accentColor}66`, textTransform: "uppercase" }}>◈ {scene.title} ◈</div>
                 <div style={{ marginTop: 8, width: "min(400px, 60%)", height: 1, margin: "8px auto 0", background: `linear-gradient(90deg, transparent, ${scene.accentColor}, transparent)` }} />
             </div>
-            <div style={{ position: "absolute", bottom: 60, right: 40, zIndex: 10, maxWidth: "min(500px, 70vw)", animation: "subtitleReveal .6s .3s ease both", pointerEvents: "none" }}>
+            <div style={{ position: "absolute", top: "clamp(96px, 14vh, 140px)", right: 40, zIndex: 10, maxWidth: "min(500px, 70vw)", animation: "subtitleReveal .6s .3s ease both", pointerEvents: "none" }}>
                 {scene.lines.slice(0, subtitleLine).map((line, i) => (
                     <div key={i} style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: "clamp(11px,1.4vw,14px)", color: "rgba(160,180,160,.45)", lineHeight: 1.7, textAlign: "right", marginBottom: 2 }}>{line}</div>
                 ))}
