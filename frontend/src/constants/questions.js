@@ -24,6 +24,19 @@ export const QUESTIONS = {
             start: "function solve(prices) {\n  // Return maximum profit\n  \n}",
             tests: [{ l: "Classic case", r: (f) => f([7, 1, 5, 3, 6, 4]), e: 5 }, { l: "No profit", r: (f) => f([7, 6, 4, 3, 1]), e: 0 }, { l: "Single buy/sell", r: (f) => f([1, 2]), e: 1 }, { l: "Large gain", r: (f) => f([2, 4, 1, 7]), e: 6 }],
         },
+        {
+            id: "1d", title: "Product of Array Except Self", diff: "Medium", xp: 170,
+            desc: "Given an integer array `nums`, return an array `answer` such that `answer[i]` equals the product of all elements of `nums` except `nums[i]`.\n\nDo not use division.",
+            examples: [{ i: "nums=[1,2,3,4]", o: "[24,12,8,6]" }, { i: "nums=[-1,1,0,-3,3]", o: "[0,0,9,0,0]" }],
+            hints: ["Build prefix products from left to right", "Build suffix products from right to left", "answer[i] = prefix[i] * suffix[i]"],
+            start: "function solve(nums) {\n  // Return product array except self\n  \n}",
+            tests: [
+                { l: "Basic case", r: (f) => JSON.stringify(f([1, 2, 3, 4])), e: JSON.stringify([24, 12, 8, 6]) },
+                { l: "Contains zero", r: (f) => JSON.stringify(f([-1, 1, 0, -3, 3])), e: JSON.stringify([0, 0, 9, 0, 0]) },
+                { l: "Two elements", r: (f) => JSON.stringify(f([2, 3])), e: JSON.stringify([3, 2]) },
+                { l: "Single element", r: (f) => JSON.stringify(f([5])), e: JSON.stringify([1]) },
+            ],
+        },
     ],
     2: [
         {
@@ -50,6 +63,14 @@ export const QUESTIONS = {
             start: "function solve(s, t) {\n  // Return true if t is anagram of s\n  \n}",
             tests: [{ l: "Valid anagram", r: (f) => f("anagram", "nagaram"), e: true }, { l: "Not anagram", r: (f) => f("rat", "car"), e: false }, { l: "Different lengths", r: (f) => f("ab", "a"), e: false }, { l: "Same string", r: (f) => f("abc", "abc"), e: true }],
         },
+        {
+            id: "2d", title: "Longest Palindromic Substring Length", diff: "Medium", xp: 170,
+            desc: "Given a string `s`, return the **length** of the longest palindromic substring.",
+            examples: [{ i: 's="babad"', o: "3" }, { i: 's="cbbd"', o: "2" }],
+            hints: ["Try expanding around each character as a center", "Check both odd-length and even-length palindromes", "Track the maximum span seen so far"],
+            start: "function solve(s) {\n  // Return the length of the longest palindromic substring\n  \n}",
+            tests: [{ l: "Odd palindrome", r: (f) => f("babad"), e: 3 }, { l: "Even palindrome", r: (f) => f("cbbd"), e: 2 }, { l: "Single char", r: (f) => f("a"), e: 1 }, { l: "Long center", r: (f) => f("forgeeksskeegfor"), e: 10 }],
+        },
     ],
     3: [
         {
@@ -75,6 +96,14 @@ export const QUESTIONS = {
             hints: ["This is essentially Fibonacci!", "ways(n) = ways(n-1) + ways(n-2)", "Use a memo object to cache results: memo[n] = result"],
             start: "function solve(n, memo={}) {\n  // Return number of distinct ways\n  \n}",
             tests: [{ l: "2 steps", r: (f) => f(2), e: 2 }, { l: "3 steps", r: (f) => f(3), e: 3 }, { l: "5 steps", r: (f) => f(5), e: 8 }, { l: "10 steps", r: (f) => f(10), e: 89 }],
+        },
+        {
+            id: "3d", title: "Factorial Number", diff: "Easy", xp: 110,
+            desc: "Given a non-negative integer `n`, return `n!`.\n\nSolve it **recursively**.",
+            examples: [{ i: "n=0", o: "1" }, { i: "n=5", o: "120" }],
+            hints: ["Base case: 0! = 1 and 1! = 1", "Recursive case: n * solve(n - 1)", "Make sure recursion stops at the base case"],
+            start: "function solve(n) {\n  // Return n factorial recursively\n  \n}",
+            tests: [{ l: "Zero", r: (f) => f(0), e: 1 }, { l: "One", r: (f) => f(1), e: 1 }, { l: "Five", r: (f) => f(5), e: 120 }, { l: "Seven", r: (f) => f(7), e: 5040 }],
         },
     ],
     4: [
@@ -107,6 +136,19 @@ export const QUESTIONS = {
             start: "function solve(nums, k) {\n  // Return count of subarrays with sum k\n  \n}",
             tests: [{ l: "Basic case", r: (f) => f([1, 1, 1], 2), e: 2 }, { l: "Multiple subarrays", r: (f) => f([1, 2, 3], 3), e: 2 }, { l: "Negative nums", r: (f) => f([1, -1, 1], 1), e: 3 }, { l: "Single match", r: (f) => f([3, 4, 7], 7), e: 2 }],
         },
+        {
+            id: "4d", title: "Top K Frequent Elements", diff: "Medium", xp: 190,
+            desc: "Given an integer array `nums` and an integer `k`, return the `k` most frequent elements.",
+            examples: [{ i: "nums=[1,1,1,2,2,3], k=2", o: "[1,2]" }, { i: "nums=[1], k=1", o: "[1]" }],
+            hints: ["Count the frequency of each number", "Sort by frequency descending or use buckets", "Return the top k keys"],
+            start: "function solve(nums, k) {\n  // Return the k most frequent elements\n  \n}",
+            tests: [
+                { l: "Top two", r: (f) => JSON.stringify(f([1, 1, 1, 2, 2, 3], 2).sort((a, b) => a - b)), e: JSON.stringify([1, 2]) },
+                { l: "Single answer", r: (f) => JSON.stringify(f([1], 1)), e: JSON.stringify([1]) },
+                { l: "Negative values", r: (f) => JSON.stringify(f([-1, -1, -1, 2, 2, 3], 2).sort((a, b) => a - b)), e: JSON.stringify([-1, 2]) },
+                { l: "Another mix", r: (f) => JSON.stringify(f([4, 4, 4, 6, 6, 7], 2).sort((a, b) => a - b)), e: JSON.stringify([4, 6]) },
+            ],
+        },
     ],
     5: [
         {
@@ -136,6 +178,19 @@ export const QUESTIONS = {
                 { l: "Ascending", r: (f) => JSON.stringify(f([30, 40, 50, 60])), e: JSON.stringify([1, 1, 1, 0]) },
                 { l: "Descending", r: (f) => JSON.stringify(f([60, 50, 40, 30])), e: JSON.stringify([0, 0, 0, 0]) },
                 { l: "Single", r: (f) => JSON.stringify(f([75])), e: JSON.stringify([0]) },
+            ],
+        },
+        {
+            id: "5d", title: "Evaluate Reverse Polish Notation", diff: "Medium", xp: 180,
+            desc: "Given an array of tokens representing an arithmetic expression in **Reverse Polish Notation**, evaluate it and return the integer result.",
+            examples: [{ i: 'tokens=["2","1","+","3","*"]', o: "9" }, { i: 'tokens=["4","13","5","/","+"]', o: "6" }],
+            hints: ["Use a stack of numbers", "Push numbers onto the stack", "When you see an operator, pop two values, evaluate, and push the result back"],
+            start: "function solve(tokens) {\n  // Return the value of the RPN expression\n  \n}",
+            tests: [
+                { l: "Basic expression", r: (f) => f(["2", "1", "+", "3", "*"]), e: 9 },
+                { l: "Division", r: (f) => f(["4", "13", "5", "/", "+"]), e: 6 },
+                { l: "Long sample", r: (f) => f(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]), e: 22 },
+                { l: "Negative sum", r: (f) => f(["3", "-4", "+"]), e: -1 },
             ],
         },
     ],
@@ -177,6 +232,19 @@ export const QUESTIONS = {
                 { l: "Multiple max", r: (f) => f(["A", "A", "B", "B"], 2), e: 5 },
             ],
         },
+        {
+            id: "6d", title: "Sliding Window Maximum", diff: "Hard", xp: 260,
+            desc: "Given an array `nums` and a window size `k`, return the maximum value in each sliding window.",
+            examples: [{ i: "nums=[1,3,-1,-3,5,3,6,7], k=3", o: "[3,3,5,5,6,7]" }, { i: "nums=[1], k=1", o: "[1]" }],
+            hints: ["Use a deque of indices", "Remove indices that fall out of the current window", "Keep the deque decreasing so the front is always the max"],
+            start: "function solve(nums, k) {\n  // Return max value from each sliding window\n  \n}",
+            tests: [
+                { l: "Classic case", r: (f) => JSON.stringify(f([1, 3, -1, -3, 5, 3, 6, 7], 3)), e: JSON.stringify([3, 3, 5, 5, 6, 7]) },
+                { l: "Single element", r: (f) => JSON.stringify(f([1], 1)), e: JSON.stringify([1]) },
+                { l: "Window size two", r: (f) => JSON.stringify(f([9, 7, 2, 4, 6, 8], 2)), e: JSON.stringify([9, 7, 4, 6, 8]) },
+                { l: "All equal", r: (f) => JSON.stringify(f([5, 5, 5, 5], 3)), e: JSON.stringify([5, 5]) },
+            ],
+        },
     ],
     7: [
         {
@@ -211,6 +279,19 @@ export const QUESTIONS = {
                 { l: "One empty", r: (f) => JSON.stringify(f([], [0])), e: JSON.stringify([0]) },
                 { l: "Both empty", r: (f) => JSON.stringify(f([], [])), e: JSON.stringify([]) },
                 { l: "No overlap", r: (f) => JSON.stringify(f([1, 2], [3, 4])), e: JSON.stringify([1, 2, 3, 4]) },
+            ],
+        },
+        {
+            id: "7d", title: "Remove Nth Node From End", diff: "Medium", xp: 170,
+            desc: "Given a linked list represented as an array `head`, remove the `n`th node from the end and return the resulting list as an array.",
+            examples: [{ i: "head=[1,2,3,4,5], n=2", o: "[1,2,3,5]" }, { i: "head=[1], n=1", o: "[]" }],
+            hints: ["Use two pointers with a gap of n nodes", "Or compute the index from the front using head.length - n", "Return a new array without that element"],
+            start: "function solve(head, n) {\n  // Return the list after removing the nth node from the end\n  \n}",
+            tests: [
+                { l: "Remove from middle", r: (f) => JSON.stringify(f([1, 2, 3, 4, 5], 2)), e: JSON.stringify([1, 2, 3, 5]) },
+                { l: "Remove only node", r: (f) => JSON.stringify(f([1], 1)), e: JSON.stringify([]) },
+                { l: "Remove tail", r: (f) => JSON.stringify(f([1, 2], 1)), e: JSON.stringify([1]) },
+                { l: "Remove head", r: (f) => JSON.stringify(f([1, 2], 2)), e: JSON.stringify([2]) },
             ],
         },
     ],
@@ -254,6 +335,19 @@ export const QUESTIONS = {
                 { l: "Two twos first", r: (f) => JSON.stringify(f([2, 2, 0, 0])), e: JSON.stringify([0, 0, 2, 2]) },
             ],
         },
+        {
+            id: "8d", title: "Insertion Sort", diff: "Easy", xp: 120,
+            desc: "Implement **Insertion Sort** on array `nums`. Return the sorted array.",
+            examples: [{ i: "nums=[12,11,13,5,6]", o: "[5,6,11,12,13]" }],
+            hints: ["Treat the left side as a sorted section", "Take the next value and shift larger items one step right", "Insert the current value into its correct position"],
+            start: "function solve(nums) {\n  const arr = [...nums];\n  // Implement insertion sort\n  return arr;\n}",
+            tests: [
+                { l: "Classic case", r: (f) => JSON.stringify(f([12, 11, 13, 5, 6])), e: JSON.stringify([5, 6, 11, 12, 13]) },
+                { l: "Already sorted", r: (f) => JSON.stringify(f([1, 2, 3, 4])), e: JSON.stringify([1, 2, 3, 4]) },
+                { l: "Reverse order", r: (f) => JSON.stringify(f([4, 3, 2, 1])), e: JSON.stringify([1, 2, 3, 4]) },
+                { l: "Duplicates", r: (f) => JSON.stringify(f([3, 1, 2, 1])), e: JSON.stringify([1, 1, 2, 3]) },
+            ],
+        },
     ],
     9: [
         {
@@ -285,6 +379,14 @@ export const QUESTIONS = {
                 { l: "Two elems", r: (f) => { const i = f([2, 1]); return i === 0; }, e: true },
             ],
         },
+        {
+            id: "9d", title: "Find Minimum in Rotated Sorted Array", diff: "Medium", xp: 170,
+            desc: "Given a rotated sorted array `nums` with unique elements, return the **minimum** element in O(log n) time.",
+            examples: [{ i: "nums=[3,4,5,1,2]", o: "1" }, { i: "nums=[4,5,6,7,0,1,2]", o: "0" }],
+            hints: ["Use binary search on the sorted halves", "If nums[mid] > nums[right], the minimum is to the right", "Otherwise the minimum is at mid or to the left"],
+            start: "function solve(nums) {\n  // Return the minimum value\n  \n}",
+            tests: [{ l: "Small rotation", r: (f) => f([3, 4, 5, 1, 2]), e: 1 }, { l: "Large rotation", r: (f) => f([4, 5, 6, 7, 0, 1, 2]), e: 0 }, { l: "Not rotated", r: (f) => f([11, 13, 15, 17]), e: 11 }, { l: "Two elements", r: (f) => f([2, 1]), e: 1 }],
+        },
     ],
     10: [
         {
@@ -313,6 +415,19 @@ export const QUESTIONS = {
                 { l: "3 levels", r: (f) => JSON.stringify(f([3, 9, 20, null, null, 15, 7])), e: JSON.stringify([[3], [9, 20], [15, 7]]) },
                 { l: "Single", r: (f) => JSON.stringify(f([1])), e: JSON.stringify([[1]]) },
                 { l: "Full tree", r: (f) => JSON.stringify(f([1, 2, 3, 4, 5, 6, 7])), e: JSON.stringify([[1], [2, 3], [4, 5, 6, 7]]) },
+            ],
+        },
+        {
+            id: "10d", title: "Binary Tree Right Side View", diff: "Medium", xp: 180,
+            desc: "Given a binary tree as a level-order array, return the values visible when looking at the tree from the **right side**.",
+            examples: [{ i: "tree=[1,2,3,null,5,null,4]", o: "[1,3,4]" }, { i: "tree=[1,null,3]", o: "[1,3]" }],
+            hints: ["Process the tree level by level", "At each level, keep the last visible node", "Ignore null entries while traversing"],
+            start: "function solve(tree) {\n  // Return the right side view as an array\n  \n}",
+            tests: [
+                { l: "Classic tree", r: (f) => JSON.stringify(f([1, 2, 3, null, 5, null, 4])), e: JSON.stringify([1, 3, 4]) },
+                { l: "Right child only", r: (f) => JSON.stringify(f([1, null, 3])), e: JSON.stringify([1, 3]) },
+                { l: "Empty tree", r: (f) => JSON.stringify(f([])), e: JSON.stringify([]) },
+                { l: "Left-heavy bottom", r: (f) => JSON.stringify(f([1, 2, 3, 4])), e: JSON.stringify([1, 3, 4]) },
             ],
         },
     ],
@@ -344,6 +459,14 @@ export const QUESTIONS = {
                 { l: "Empty node", r: (f) => JSON.stringify(f([[]])), e: JSON.stringify([[]]) },
                 { l: "Linear chain", r: (f) => JSON.stringify(f([[1], [0, 2], [1]])), e: JSON.stringify([[1], [0, 2], [1]]) },
             ],
+        },
+        {
+            id: "11d", title: "Network Delay Time", diff: "Hard", xp: 300,
+            desc: "You are given a directed weighted graph `times` where each entry is `[u, v, w]` meaning a signal travels from `u` to `v` in `w` units. Return how long it takes for all nodes to receive the signal from source `k`, or `-1` if impossible.",
+            examples: [{ i: "times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2", o: "2" }, { i: "times=[[1,2,1]], n=2, k=2", o: "-1" }],
+            hints: ["Use Dijkstra's algorithm or repeated relaxation", "Track the shortest known time to each node", "If any node stays unreachable, return -1"],
+            start: "function solve(times, n, k) {\n  // Return the network delay time\n  \n}",
+            tests: [{ l: "Standard graph", r: (f) => f([[2, 1, 1], [2, 3, 1], [3, 4, 1]], 4, 2), e: 2 }, { l: "Single edge", r: (f) => f([[1, 2, 1]], 2, 1), e: 1 }, { l: "Unreachable node", r: (f) => f([[1, 2, 1]], 2, 2), e: -1 }, { l: "Choose faster path", r: (f) => f([[1, 2, 1], [2, 3, 2], [1, 3, 4]], 3, 1), e: 3 }],
         },
     ],
 };
