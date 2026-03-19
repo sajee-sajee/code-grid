@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
 import { DISTRICTS } from "../constants/districts";
+import { getAvailableDifficulties } from "../utils/questionSets";
 
 export default function DuelSetupPage({ onNav, onStartDuel }) {
     const [topic, setTopic] = useState("Arrays");
     const [diff, setDiff] = useState("Easy");
     const topics = DISTRICTS.map((d) => d.topic);
+    const selectedDistrict = DISTRICTS.find((d) => d.topic === topic) || DISTRICTS[0];
+    const availableDiffs = getAvailableDifficulties(selectedDistrict?.id);
+
+    useEffect(() => {
+        if (availableDiffs.length && !availableDiffs.includes(diff)) {
+            setDiff(availableDiffs[0]);
+        }
+    }, [availableDiffs, diff]);
 
     return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
@@ -25,15 +34,36 @@ export default function DuelSetupPage({ onNav, onStartDuel }) {
                         <div className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", marginBottom: 8, letterSpacing: ".15em" }}>DIFFICULTY</div>
                         <div style={{ display: "flex", gap: 8 }}>
                             {["Easy", "Medium", "Hard"].map((d) => (
-                                <div key={d} onClick={() => setDiff(d)} style={{ flex: 1, padding: "10px 0", textAlign: "center", cursor: "pointer", background: diff === d ? (d === "Easy" ? "rgba(0,255,65,.15)" : d === "Medium" ? "rgba(255,200,0,.15)" : "rgba(255,0,51,.15)") : "rgba(0,8,18,.8)", border: diff === d ? `1px solid ${d === "Easy" ? "#00ff41" : d === "Medium" ? "#ffcc00" : "#ff0033"}` : "1px solid rgba(255,255,255,.1)", fontFamily: "Orbitron,monospace", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", color: diff === d ? (d === "Easy" ? "#00ff41" : d === "Medium" ? "#ffcc00" : "#ff0033") : "rgba(160,180,200,.5)", transition: "all .2s" }}>
+                                <div
+                                    key={d}
+                                    onClick={() => { if (availableDiffs.includes(d)) setDiff(d); }}
+                                    style={{
+                                        flex: 1,
+                                        padding: "10px 0",
+                                        textAlign: "center",
+                                        cursor: availableDiffs.includes(d) ? "pointer" : "not-allowed",
+                                        background: diff === d ? (d === "Easy" ? "rgba(0,255,65,.15)" : d === "Medium" ? "rgba(255,200,0,.15)" : "rgba(255,0,51,.15)") : "rgba(0,8,18,.8)",
+                                        border: diff === d ? `1px solid ${d === "Easy" ? "#00ff41" : d === "Medium" ? "#ffcc00" : "#ff0033"}` : "1px solid rgba(255,255,255,.1)",
+                                        fontFamily: "Orbitron,monospace",
+                                        fontSize: 11,
+                                        fontWeight: 700,
+                                        letterSpacing: ".08em",
+                                        color: diff === d ? (d === "Easy" ? "#00ff41" : d === "Medium" ? "#ffcc00" : "#ff0033") : availableDiffs.includes(d) ? "rgba(160,180,200,.5)" : "rgba(160,180,200,.2)",
+                                        transition: "all .2s",
+                                        opacity: availableDiffs.includes(d) ? 1 : 0.45,
+                                    }}
+                                >
                                     {d.toUpperCase()}
                                 </div>
                             ))}
                         </div>
+                        <div className="MONO" style={{ fontSize: 10, color: "rgba(255,0,51,.35)", marginTop: 10, letterSpacing: ".12em" }}>
+                            QUESTION SET: {availableDiffs.join(" · ")}
+                        </div>
                     </div>
                     <div style={{ display: "flex", gap: 12 }}>
                         <Btn variant="ghost" onClick={() => onNav("dashboard")} style={{ flex: 1, justifyContent: "center" }}>← BACK</Btn>
-                        <Btn variant="r" onClick={() => onStartDuel({ topic, diff })} style={{ flex: 2, justifyContent: "center" }}>⚔️ ENTER ARENA</Btn>
+                        <Btn variant="r" onClick={() => onStartDuel({ topic, diff, levelId: selectedDistrict?.id || 1 })} style={{ flex: 2, justifyContent: "center" }}>⚔️ ENTER ARENA</Btn>
                     </div>
                 </CyberCard>
             </div>

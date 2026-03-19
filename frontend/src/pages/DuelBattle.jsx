@@ -3,14 +3,14 @@ import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
 import CodeEditor from "../components/CodeEditor";
 import { DISTRICTS } from "../constants/districts";
-import { QUESTIONS } from "../constants/questions";
 import { evalCode } from "../utils/evalCode";
+import { getQuestionSet, pickNextQuestion } from "../utils/questionSets";
 
 export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
     const topicDistrict = DISTRICTS.find((d) => d.topic === duelConfig.topic);
-    const levelQs = QUESTIONS[topicDistrict?.id || 1] || QUESTIONS[1];
-    const filteredQs = levelQs.filter((q) => q.diff === duelConfig.diff);
-    const [q] = useState(filteredQs[0] || levelQs[0]);
+    const levelId = duelConfig.levelId || topicDistrict?.id || 1;
+    const questionSet = getQuestionSet(levelId, duelConfig.diff);
+    const [q] = useState(() => pickNextQuestion(levelId, duelConfig.diff) || questionSet[0]);
     const [code, setCode] = useState(q.start);
     const [results, setResults] = useState(null);
     const [running, setRunning] = useState(false);
