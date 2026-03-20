@@ -26,6 +26,9 @@ export const getProgress = () => API.get("/progress");
 // Duel
 export const recordDuelEnd = (data) => API.post("/duel/end", data);
 
+// Compiler
+export const runCompiler = (data) => API.post("/compiler/run", data);
+
 // Daily
 export const getDaily = () => API.get("/daily");
 export const completeDaily = (data) => API.post("/daily/complete", data);

@@ -2,24 +2,43 @@ import { useState } from "react";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
 import CodeEditor from "../components/CodeEditor";
+import LanguagePicker from "../components/LanguagePicker";
 import { DAILY_POOL } from "../constants/achievements";
 import { evalCode } from "../utils/evalCode";
+import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
 import { completeDaily } from "../services/api";
 import { useUser } from "../contexts/UserContext";
 
 export default function DailyQuestPage({ onNav }) {
     const { user, patchUser } = useUser();
     const [q] = useState(() => DAILY_POOL[Math.floor(Date.now() / 86400000) % DAILY_POOL.length]);
-    const [code, setCode] = useState(q.start);
+    const starterMap = buildStarterMap(q);
+    const [language, setLanguage] = useState("javascript");
+    const [codeByLanguage, setCodeByLanguage] = useState(() => buildStarterMap(q));
     const [results, setResults] = useState(null);
     const [running, setRunning] = useState(false);
     const [hintShown, setHintShown] = useState(false);
     const done = user.dailyDone;
+    const code = codeByLanguage[language] || "";
+
+    const handleLanguageChange = (nextLanguage) => {
+        setLanguage(nextLanguage);
+        setResults(null);
+        setCodeByLanguage((prev) => (
+            Object.prototype.hasOwnProperty.call(prev, nextLanguage)
+                ? prev
+                : { ...prev, [nextLanguage]: starterMap[nextLanguage] }
+        ));
+    };
+
+    const updateCode = (nextCode) => {
+        setCodeByLanguage((prev) => ({ ...prev, [language]: nextCode }));
+    };
 
     const run = () => {
         setRunning(true);
         setTimeout(async () => {
-            const res = evalCode(code, q.tests);
+            const res = await evalCode(code, q.tests, language);
             setResults(res);
             setRunning(false);
             if (res.every((r) => r.passed) && !done) {
@@ -81,10 +100,14 @@ export default function DailyQuestPage({ onNav }) {
                         <CyberCard style={{ padding: 0, overflow: "hidden" }}>
                             <div style={{ padding: "10px 16px", background: "rgba(255,200,0,.05)", borderBottom: "1px solid rgba(255,200,0,.2)", display: "flex", gap: 8 }}>
                                 <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)", letterSpacing: ".15em" }}>DAILY_{new Date().toISOString().slice(0, 10)}.js</span>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)", letterSpacing: ".15em" }}>DAILY_{new Date().toISOString().slice(0, 10)}.{getFileExtension(language)}</span>
+                                <div style={{ marginLeft: "auto" }}>
+                                    <LanguagePicker value={language} onChange={handleLanguageChange} />
+                                </div>
                             </div>
-                            <CodeEditor value={code} onChange={setCode} height={260} />
+                            <CodeEditor value={code} onChange={updateCode} height={260} />
                         </CyberCard>
+                        <Btn variant="ghost" size="sm" onClick={() => { updateCode(starterMap[language]); setResults(null); }} style={{ alignSelf: "flex-end" }}>↺ RESET</Btn>
                         <Btn variant={done ? "ghost" : "g"} onClick={run} disabled={running || done} style={{ justifyContent: "center" }}>
                             {done ? "✓ QUEST COMPLETED" : running ? "⏳ RUNNING..." : "▶ SUBMIT SOLUTION"}
                         </Btn>

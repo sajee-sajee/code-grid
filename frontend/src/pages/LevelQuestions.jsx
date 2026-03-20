@@ -2,9 +2,11 @@ import { useState } from "react";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
 import CodeEditor from "../components/CodeEditor";
+import LanguagePicker from "../components/LanguagePicker";
 import { DISTRICTS } from "../constants/districts";
 import { QUESTIONS } from "../constants/questions";
 import { evalCode } from "../utils/evalCode";
+import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
 import { recordSolve } from "../services/api";
 import { useUser } from "../contexts/UserContext";
 
@@ -18,7 +20,9 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
         return f >= 0 ? f : 0;
     });
     const q = questions[qIdx];
-    const [code, setCode] = useState(q?.start || "");
+    const starterMap = q ? buildStarterMap(q) : {};
+    const [language, setLanguage] = useState("javascript");
+    const [codeByLanguage, setCodeByLanguage] = useState(() => (q ? buildStarterMap(q) : {}));
     const [results, setResults] = useState(null);
     const [running, setRunning] = useState(false);
     const [hintIdx, setHintIdx] = useState(-1);
@@ -26,8 +30,30 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
     const [xpPopup, setXpPopup] = useState(null);
     const [levelDone, setLevelDone] = useState(false);
     const alreadySolved = q && solvedInLevel.includes(q.id);
+    const code = codeByLanguage[language] || "";
 
-    const handleQSwitch = (idx) => { setQIdx(idx); setCode(questions[idx].start); setResults(null); setHintIdx(-1); };
+    const handleQSwitch = (idx) => {
+        const nextQuestion = questions[idx];
+        setQIdx(idx);
+        setLanguage("javascript");
+        setCodeByLanguage(buildStarterMap(nextQuestion));
+        setResults(null);
+        setHintIdx(-1);
+    };
+
+    const handleLanguageChange = (nextLanguage) => {
+        setLanguage(nextLanguage);
+        setResults(null);
+        setCodeByLanguage((prev) => (
+            Object.prototype.hasOwnProperty.call(prev, nextLanguage)
+                ? prev
+                : { ...prev, [nextLanguage]: starterMap[nextLanguage] }
+        ));
+    };
+
+    const updateCode = (nextCode) => {
+        setCodeByLanguage((prev) => ({ ...prev, [language]: nextCode }));
+    };
 
     if (!district || !q) return null;
 
@@ -49,7 +75,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
     const runCode = () => {
         setRunning(true);
         setTimeout(async () => {
-            const res = evalCode(code, q.tests);
+            const res = await evalCode(code, q.tests, language);
             setResults(res);
             setRunning(false);
             const allPass = res.every((r) => r.passed);
@@ -127,17 +153,20 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                                     <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} />
                                     <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} />
                                 </div>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(0,255,65,.5)", letterSpacing: ".15em" }}>MISSION_{q.id.toUpperCase()}.js</div>
-                                {alreadySolved && <span className="MONO gG" style={{ marginLeft: "auto", fontSize: 11 }}>✓ SOLVED</span>}
-                                {xpPopup && <div className="MONO aXp gG" style={{ fontSize: 14, fontWeight: 700, marginLeft: "auto" }}>{xpPopup}</div>}
+                                <div className="MONO" style={{ fontSize: 11, color: "rgba(0,255,65,.5)", letterSpacing: ".15em" }}>MISSION_{q.id.toUpperCase()}.{getFileExtension(language)}</div>
+                                <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+                                    <LanguagePicker value={language} onChange={handleLanguageChange} />
+                                    {alreadySolved && <span className="MONO gG" style={{ fontSize: 11 }}>✓ SOLVED</span>}
+                                    {xpPopup && <div className="MONO aXp gG" style={{ fontSize: 14, fontWeight: 700 }}>{xpPopup}</div>}
+                                </div>
                             </div>
-                            <CodeEditor value={code} onChange={setCode} height={280} />
+                            <CodeEditor value={code} onChange={updateCode} height={280} />
                         </CyberCard>
                         <div style={{ display: "flex", gap: 10 }}>
                             <Btn variant="c" onClick={runCode} disabled={running} style={{ flex: 1, justifyContent: "center" }}>
                                 {running ? "⏳ EXECUTING..." : "▶ RUN CODE"}
                             </Btn>
-                            <Btn variant="ghost" size="sm" onClick={() => { setCode(q.start); setResults(null); }}>↺ RESET</Btn>
+                            <Btn variant="ghost" size="sm" onClick={() => { updateCode(starterMap[language]); setResults(null); }}>↺ RESET</Btn>
                         </div>
                         {results && (
                             <CyberCard style={{ padding: 16 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>

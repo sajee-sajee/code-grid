@@ -2,16 +2,20 @@ import { useState, useEffect, useCallback } from "react";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
 import CodeEditor from "../components/CodeEditor";
+import LanguagePicker from "../components/LanguagePicker";
 import { DISTRICTS } from "../constants/districts";
 import { evalCode } from "../utils/evalCode";
 import { getQuestionSet, pickNextQuestion } from "../utils/questionSets";
+import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
 
 export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
     const topicDistrict = DISTRICTS.find((d) => d.topic === duelConfig.topic);
     const levelId = duelConfig.levelId || topicDistrict?.id || 1;
     const questionSet = getQuestionSet(levelId, duelConfig.diff);
     const [q] = useState(() => pickNextQuestion(levelId, duelConfig.diff) || questionSet[0]);
-    const [code, setCode] = useState(q.start);
+    const starterMap = buildStarterMap(q);
+    const [language, setLanguage] = useState("javascript");
+    const [codeByLanguage, setCodeByLanguage] = useState(() => buildStarterMap(q));
     const [results, setResults] = useState(null);
     const [running, setRunning] = useState(false);
     const [timeLeft, setTimeLeft] = useState(180);
@@ -21,6 +25,21 @@ export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
     const [cpuScore, setCpuScore] = useState(0);
     const [finished, setFinished] = useState(false);
     const cpuDelay = duelConfig.diff === "Easy" ? 60 : duelConfig.diff === "Medium" ? 100 : 150;
+    const code = codeByLanguage[language] || "";
+
+    const handleLanguageChange = (nextLanguage) => {
+        setLanguage(nextLanguage);
+        setResults(null);
+        setCodeByLanguage((prev) => (
+            Object.prototype.hasOwnProperty.call(prev, nextLanguage)
+                ? prev
+                : { ...prev, [nextLanguage]: starterMap[nextLanguage] }
+        ));
+    };
+
+    const updateCode = (nextCode) => {
+        setCodeByLanguage((prev) => ({ ...prev, [language]: nextCode }));
+    };
 
     const finalize = useCallback((ps = playerScore, cs = cpuScore) => {
         if (!finished) { setFinished(true); onDuelEnd({ won: ps > cs, playerScore: ps, cpuScore: cs, question: q }); }
@@ -48,14 +67,15 @@ export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
         if (finished) return;
         setRunning(true);
         setTimeout(() => {
-            const res = evalCode(code, q.tests);
-            setResults(res);
-            setRunning(false);
-            if (res.every((r) => r.passed)) {
-                const score = 200 + Math.floor(timeLeft * 1.2);
-                setPlayerScore(score);
-                finalize(score, cpuScore);
-            }
+            Promise.resolve(evalCode(code, q.tests, language)).then((res) => {
+                setResults(res);
+                setRunning(false);
+                if (res.every((r) => r.passed)) {
+                    const score = 200 + Math.floor(timeLeft * 1.2);
+                    setPlayerScore(score);
+                    finalize(score, cpuScore);
+                }
+            });
         }, 400);
     };
 
@@ -126,12 +146,16 @@ export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
                     </CyberCard>
                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                         <CyberCard style={{ padding: 0, overflow: "hidden" }}>
-                            <div style={{ padding: "10px 16px", background: "rgba(255,0,51,.04)", borderBottom: "1px solid rgba(255,0,51,.2)", display: "flex", gap: 8 }}>
+                            <div style={{ padding: "10px 16px", background: "rgba(255,0,51,.04)", borderBottom: "1px solid rgba(255,0,51,.2)", display: "flex", gap: 8, alignItems: "center" }}>
                                 <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", letterSpacing: ".15em" }}>DUEL_BATTLE.js</span>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", letterSpacing: ".15em" }}>DUEL_BATTLE.{getFileExtension(language)}</span>
+                                <div style={{ marginLeft: "auto" }}>
+                                    <LanguagePicker value={language} onChange={handleLanguageChange} />
+                                </div>
                             </div>
-                            <CodeEditor value={code} onChange={setCode} height={240} />
+                            <CodeEditor value={code} onChange={updateCode} height={240} />
                         </CyberCard>
+                        <Btn variant="ghost" size="sm" onClick={() => { updateCode(starterMap[language]); setResults(null); }} style={{ alignSelf: "flex-end" }}>↺ RESET</Btn>
                         <Btn variant="r" onClick={run} disabled={running || finished} style={{ justifyContent: "center" }}>
                             {finished ? "⚔️ BATTLE ENDED" : running ? "⏳ EXECUTING..." : "▶ SUBMIT ANSWER"}
                         </Btn>
