@@ -86,11 +86,11 @@ export default function CinematicScene({ sceneId, onSkip }) {
             <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                 {scene.bgImage ? (
                     <img src={scene.bgImage} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8, animation: scene.bgAnim, transformOrigin: "center center" }} alt="background" />
-                ) : (
+                ) : scene.showBgFallback !== false ? (
                     <div style={{ fontSize: "min(40vw, 40vh)", opacity: 0.06, animation: scene.bgAnim, filter: `blur(2px) drop-shadow(0 0 80px ${scene.accentColor})`, transformOrigin: "center center" }}>
                         {scene.bgEmoji}
                     </div>
-                )}
+                ) : null}
             </div>
             {particles.map((p) => (
                 <div key={p.id} style={{ position: "absolute", left: `${p.x}%`, top: `${p.y}%`, fontSize: p.size, opacity: p.opacity, color: scene.accentColor, fontFamily: "'Share Tech Mono', monospace", fontWeight: 700, animation: `sceneFgFloat ${p.dur}s ease-in-out ${p.delay}s infinite`, textShadow: `0 0 12px ${scene.accentColor}`, pointerEvents: "none", zIndex: 4 }}>
@@ -111,11 +111,11 @@ export default function CinematicScene({ sceneId, onSkip }) {
                         }}
                         alt="foreground"
                     />
-                ) : (
+                ) : scene.showFgFallback !== false ? (
                     <div style={{ fontSize: "min(20vw, 22vh)", opacity: 0.22, animation: scene.fgAnim, filter: `drop-shadow(0 0 40px ${scene.accentColor})` }}>
                         {scene.fgEmoji}
                     </div>
-                )}
+                ) : null}
             </div>
             <div style={{ position: "absolute", top: 40, left: 0, right: 0, zIndex: 10, textAlign: "center", pointerEvents: "none", animation: "subtitleReveal .8s ease both" }}>
                 <div style={{ fontFamily: "'Orbitron', monospace", fontSize: "clamp(11px,1.8vw,16px)", fontWeight: 700, letterSpacing: ".35em", color: scene.accentColor, textShadow: `0 0 20px ${scene.accentColor}, 0 0 40px ${scene.accentColor}66`, textTransform: "uppercase" }}>◈ {scene.title} ◈</div>
