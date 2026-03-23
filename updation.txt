@@ -1,0 +1,4 @@
+-> The feature abstraction of this project
+        Adding animations, Animated gifs when player won the match with teammates.
+        Compiling the code of the lobby
+        Chat option for the teammates.
