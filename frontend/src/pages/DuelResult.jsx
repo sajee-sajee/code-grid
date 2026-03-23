@@ -1,22 +1,10 @@
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
-import { useUser } from "../contexts/UserContext";
-import { recordDuelEnd } from "../services/api";
-import { useEffect } from "react";
+import { useUser } from "../contexts/useUser";
 
 export default function DuelResult({ result, onNav }) {
-    const { user, patchUser } = useUser();
+    const { user } = useUser();
     const won = result.won;
-
-    useEffect(() => {
-        // Persist duel result to backend
-        recordDuelEnd({ won: result.won, playerScore: result.playerScore, cpuScore: result.cpuScore }).catch(() => { });
-        if (result.won) {
-            patchUser({ duelWins: (user.duelWins || 0) + 1, duelGames: (user.duelGames || 0) + 1, xp: user.xp + 50 });
-        } else {
-            patchUser({ duelGames: (user.duelGames || 0) + 1 });
-        }
-    }, []);
 
     return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>

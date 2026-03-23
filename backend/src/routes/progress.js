@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const auth = require("../middleware/auth");
 
+const REQUIRED_SOLVES_PER_LEVEL = 4;
+
 // POST /api/progress/solve — record a solved question
 router.post("/solve", auth, async (req, res) => {
     try {
@@ -29,9 +31,9 @@ router.post("/solve", auth, async (req, res) => {
             user.lastDailyDate = now.toISOString();
         }
 
-        // Unlock next level if all 3 in current district solved
+        // Unlock the next level when the full district mission set is cleared.
         const inLevel = user.solved.filter((s) => s.levelId === levelId);
-        if (inLevel.length >= 3 && levelId >= user.unlockedLevel) {
+        if (inLevel.length >= REQUIRED_SOLVES_PER_LEVEL && levelId >= user.unlockedLevel) {
             user.unlockedLevel = Math.max(user.unlockedLevel, levelId + 1);
             user.xp += 200; // bonus for clearing district
         }

@@ -1,5 +1,6 @@
 import Btn from "../components/Btn";
 import { DISTRICTS } from "../constants/districts";
+import { getQuestionCountForLevel, getSolvedCountForLevel } from "../utils/progressUtils";
 
 export default function SoloPage({ user, onNav, onSelectLevel }) {
     return (
@@ -16,8 +17,9 @@ export default function SoloPage({ user, onNav, onSelectLevel }) {
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 16 }}>
                     {DISTRICTS.map((d) => {
                         const unlocked = d.id <= user.unlockedLevel;
-                        const done = user.solved.filter((s) => s.levelId === d.id).length;
-                        const completed = done >= 3;
+                        const done = getSolvedCountForLevel(user, d.id);
+                        const total = getQuestionCountForLevel(d.id);
+                        const completed = total > 0 && done >= total;
                         return (
                             <div key={d.id}
                                 className={`district-card ${unlocked ? "" : "locked"}`}
@@ -30,9 +32,9 @@ export default function SoloPage({ user, onNav, onSelectLevel }) {
                                 <div className="ORB" style={{ fontSize: 13, color: unlocked ? "#e0e8f0" : "rgba(160,180,200,.3)", marginBottom: 4 }}>{d.name}</div>
                                 <div className="MONO" style={{ fontSize: 11, color: "rgba(160,180,200,.4)", marginBottom: 10 }}>{d.topic}</div>
                                 <div style={{ height: 4, background: "rgba(255,255,255,.06)" }}>
-                                    <div style={{ width: `${(done / 3) * 100}%`, height: "100%", background: d.color, transition: "width .6s" }} />
+                                    <div style={{ width: `${total ? (done / total) * 100 : 0}%`, height: "100%", background: d.color, transition: "width .6s" }} />
                                 </div>
-                                <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.4)", marginTop: 4 }}>{done}/3 missions</div>
+                                <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.4)", marginTop: 4 }}>{done}/{total} missions</div>
                             </div>
                         );
                     })}

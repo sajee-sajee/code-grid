@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../contexts/useUser";
 
 const FACES = ["🤖", "👾", "🦾", "💀", "🧠", "🦊", "🐉", "🌀", "⚡", "🔮"];
 const OUTFITS = ["🥋", "🦺", "🧥", "👔", "🎭", "🛡️", "🔧"];
@@ -38,7 +38,7 @@ export default function ProfileSetupPage({ onComplete }) {
             const avatar = { face: FACES[face], outfit: OUTFITS[outfit], acc: ACCS[acc] };
             await saveProfile({ username: username.trim(), avatar });
             onComplete({ username: username.trim(), avatar });
-        } catch (e) {
+        } catch {
             setErr("Failed to save profile. Try again.");
         } finally {
             setLoading(false);

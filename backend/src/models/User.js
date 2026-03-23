@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
+const MS_PER_DAY = 86400000;
+
+function getUtcDayStamp(value) {
+    if (!value) return null;
+
+    const timestamp = new Date(value).getTime();
+    return Number.isFinite(timestamp) ? Math.floor(timestamp / MS_PER_DAY) : null;
+}
+
 const solvedSchema = new mongoose.Schema({
     qId: String,
     levelId: Number,
@@ -34,8 +43,16 @@ const userSchema = new mongoose.Schema({
     solved: { type: [solvedSchema], default: [] },
 }, { timestamps: true });
 
+userSchema.methods.hasCompletedDailyToday = function (now = new Date()) {
+    const lastDailyStamp = getUtcDayStamp(this.lastDailyDate);
+    if (lastDailyStamp === null) return false;
+
+    return lastDailyStamp === Math.floor(now.getTime() / MS_PER_DAY);
+};
+
 userSchema.methods.toPublic = function () {
     const obj = this.toObject();
+    obj.dailyDone = this.hasCompletedDailyToday();
     delete obj.passwordHash;
     delete obj.__v;
     return obj;

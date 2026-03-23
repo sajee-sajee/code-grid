@@ -2,7 +2,7 @@ import { useState } from "react";
 import MatrixRain from "../components/MatrixRain";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../contexts/useUser";
 
 export default function AuthPage({ mode, onNav, onSuccess }) {
     const [email, setEmail] = useState("");
