@@ -22,7 +22,7 @@ export default function CinematicScene({ sceneId, onSkip }) {
             label: scene.particles[i % scene.particles.length],
         }));
         setParticles(spawned);
-    }, [sceneId]);
+    }, [sceneId, scene.particles]);
 
     useEffect(() => {
         setTypedText("");

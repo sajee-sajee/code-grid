@@ -9,7 +9,10 @@ export default function LandingPage({ onNav }) {
         return () => clearInterval(id);
     }, []);
     const glyphs = "CODERSGUILD_NEXUS7_BREACH_PROTOCOL_EXECUTE";
-    const scrambled = glyphs.split("").map((c, i) => tick % 3 === i % 3 ? String.fromCharCode(33 + Math.floor(Math.random() * 60)) : c).join("");
+    const scrambled = glyphs
+        .split("")
+        .map((c, i) => tick % 3 === i % 3 ? String.fromCharCode(33 + ((tick * 17 + i * 11) % 60)) : c)
+        .join("");
 
     return (
         <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>

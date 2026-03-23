@@ -1,12 +1,14 @@
 import CyberCard from "../components/CyberCard";
 import XBar from "../components/XBar";
-import Btn from "../components/Btn";
 import { xpToLevel, levelXp } from "../utils/xpUtils";
+import { hasCompletedDailyToday } from "../utils/dailyUtils";
+import { getQuestionCountForLevel, getSolvedCountForLevel } from "../utils/progressUtils";
 import { DISTRICTS } from "../constants/districts";
 import { ACHIEVEMENTS } from "../constants/achievements";
 
 export default function Dashboard({ user, onNav }) {
     const lvl = xpToLevel(user.xp);
+    const doneToday = hasCompletedDailyToday(user);
     return (
         <div style={{ minHeight: "100vh", padding: 24, maxWidth: 1100, margin: "0 auto" }}>
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
@@ -37,7 +39,7 @@ export default function Dashboard({ user, onNav }) {
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20, marginBottom: 28 }}>
                     {[
                         { label: "CYBER CAMPAIGN", sub: "Solo story mode", icon: "🗺️", color: "#00ff41", onClick: () => onNav("solo"), desc: `District ${user.unlockedLevel}/11 · ${user.solved.length} missions complete` },
-                        { label: "DAILY QUEST", sub: "Maintain your streak", icon: "📅", color: "#ffcc00", onClick: () => onNav("daily"), desc: `Streak: ${user.streak} days 🔥 · ${user.dailyDone ? "✅ Done Today" : "⚡ Ready"}` },
+                        { label: "DAILY QUEST", sub: "Maintain your streak", icon: "📅", color: "#ffcc00", onClick: () => onNav("daily"), desc: `Streak: ${user.streak} days 🔥 · ${doneToday ? "✅ Done Today" : "⚡ Ready"}` },
                         { label: "DUEL ARENA", sub: "Real-time coding battles", icon: "⚔️", color: "#ff0033", onClick: () => onNav("duel-setup"), desc: `${user.duelWins || 0} wins · ${user.duelGames || 0} games played` },
                     ].map((c) => (
                         <div key={c.label} onClick={c.onClick} style={{ padding: 24, background: "rgba(0,8,18,.95)", border: `1px solid ${c.color}33`, boxShadow: `0 0 12px ${c.color}18`, cursor: "pointer", transition: "all .25s", clipPath: "polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)" }}
@@ -57,15 +59,16 @@ export default function Dashboard({ user, onNav }) {
                         <div className="ORB gC" style={{ fontSize: 13, letterSpacing: ".15em", marginBottom: 16 }}>DISTRICT PROGRESS</div>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))", gap: 10 }}>
                             {DISTRICTS.map((d) => {
-                                const done = user.solved.filter((s) => s.levelId === d.id).length;
+                                const done = getSolvedCountForLevel(user, d.id);
+                                const total = getQuestionCountForLevel(d.id);
                                 const unlocked = d.id <= user.unlockedLevel;
                                 return (
                                     <div key={d.id} style={{ padding: 10, background: "rgba(0,15,30,.6)", border: `1px solid ${unlocked ? d.color + "44" : "rgba(255,255,255,.06)"}`, opacity: unlocked ? 1 : 0.35 }}>
                                         <div style={{ fontSize: 22, marginBottom: 4 }}>{d.icon}</div>
                                         <div className="ORB" style={{ fontSize: 9, color: unlocked ? d.color : "rgba(160,180,200,.4)", letterSpacing: ".08em" }}>{d.name}</div>
-                                        <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.5)", marginTop: 2 }}>{done}/3</div>
+                                        <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.5)", marginTop: 2 }}>{done}/{total}</div>
                                         <div style={{ height: 3, background: "rgba(255,255,255,.08)", marginTop: 6 }}>
-                                            <div style={{ width: `${(done / 3) * 100}%`, height: "100%", background: d.color, transition: "width .5s" }} />
+                                            <div style={{ width: `${total ? (done / total) * 100 : 0}%`, height: "100%", background: d.color, transition: "width .5s" }} />
                                         </div>
                                     </div>
                                 );
