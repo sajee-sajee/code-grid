@@ -12,6 +12,7 @@ import DuelResult from "./pages/DuelResult";
 import CinematicScene from "./components/CinematicScene";
 import { useUser } from "./contexts/useUser";
 import { recordDuelEnd } from "./services/api";
+import { normalizeDuelResult } from "./utils/duelOutcome";
 
 const CSS_CONTENT = `
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -141,14 +142,19 @@ export default function App() {
   };
 
   const handleDuelEnd = (result) => {
-    setDuelResult(result);
+    const nextResult = normalizeDuelResult(result);
+
+    setDuelResult(nextResult);
     setScreen("duel-result");
-    showNotif(result.won ? "⚔️ VICTORY!" : "💀 Defeated. Train harder.", result.won ? "#00ff41" : "#ff0033");
+    showNotif(
+      nextResult.isTie ? "⚖️ Draw! Scores matched." : nextResult.won ? "⚔️ VICTORY!" : "💀 Defeated. Train harder.",
+      nextResult.isTie ? "#ffcc00" : nextResult.won ? "#00ff41" : "#ff0033",
+    );
 
     recordDuelEnd({
-      won: result.won,
-      playerScore: result.playerScore,
-      cpuScore: result.cpuScore,
+      won: nextResult.won,
+      playerScore: nextResult.playerScore,
+      cpuScore: nextResult.cpuScore,
     })
       .then((res) => setUser(res.data.user))
       .catch(() => {

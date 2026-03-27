@@ -51,7 +51,13 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
 
         battleStateRef.current.finished = true;
         setFinished(true);
-        onDuelEnd({ won: nextPlayerScore > nextCpuScore, playerScore: nextPlayerScore, cpuScore: nextCpuScore, question: q });
+        onDuelEnd({
+            won: nextPlayerScore > nextCpuScore,
+            isTie: nextPlayerScore === nextCpuScore,
+            playerScore: nextPlayerScore,
+            cpuScore: nextCpuScore,
+            question: q,
+        });
     }, [onDuelEnd, q]);
 
     useEffect(() => {
