@@ -36,7 +36,10 @@ export default function DuelResult({ result, onNav }) {
                     {won && <div className="MONO gY" style={{ fontSize: 12, marginBottom: 24 }}>+50 XP DUEL BONUS · +1 WIN RECORDED</div>}
                     {isTie && <div className="MONO gY" style={{ fontSize: 12, marginBottom: 24 }}>NO XP BONUS AWARDED · REMATCH TO BREAK THE DEADLOCK</div>}
                     <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-                        <Btn variant="r" onClick={() => onNav("duel-setup")}>⚔️ REMATCH</Btn>
+                        {won ? (
+                            <Btn variant="g" onClick={() => onNav("next-district")}>⏭️ NEXT DISTRICT</Btn>
+                        ) : null}
+                        <Btn variant="r" onClick={() => onNav("duel-setup")}>⚔️ {won ? "REMATCH" : "TRY AGAIN"}</Btn>
                         <Btn variant="ghost" onClick={() => onNav("dashboard")}>DASHBOARD</Btn>
                     </div>
                 </CyberCard>

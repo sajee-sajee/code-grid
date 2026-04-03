@@ -13,6 +13,7 @@ import CinematicScene from "./components/CinematicScene";
 import { useUser } from "./contexts/useUser";
 import { recordDuelEnd } from "./services/api";
 import { normalizeDuelResult } from "./utils/duelOutcome";
+import { DISTRICTS } from "./constants/districts";
 
 const CSS_CONTENT = `
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -121,7 +122,27 @@ export default function App() {
     setTimeout(() => setNotification(null), 3000);
   };
 
-  const nav = (target) => setScreen(target);
+  const nav = (target) => {
+    if (target === "next-district") {
+      const nextLevelId = Math.min(11, (duelConfig?.levelId || 1) + 1);
+      const nextDistrict = DISTRICTS.find(d => d.id === nextLevelId);
+      if (nextDistrict) {
+        setDuelConfig({ topic: nextDistrict.topic, diff: duelConfig?.diff || "Easy", levelId: nextLevelId });
+        const alreadySeen = user?.seenScenes?.includes(nextLevelId);
+        if (!alreadySeen) {
+          patchUser({ seenScenes: [...(user.seenScenes || []), nextLevelId] });
+          setPendingScene({ sceneId: nextLevelId, nextScreen: "duel-battle" });
+          setScreen("scene");
+        } else {
+          setScreen("duel-battle");
+        }
+        return;
+      }
+      setScreen("dashboard");
+      return;
+    }
+    setScreen(target);
+  };
 
   const handleAuthSuccess = (user, isNew) => {
     if (isNew) {

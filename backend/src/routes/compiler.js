@@ -98,6 +98,11 @@ for test in tests:
         exec(compiled, namespace)
         fn = namespace.get("solve") or namespace.get("solution") or namespace.get("main")
         if not callable(fn):
+            funcs = [v for k, v in namespace.items() if callable(v) and not k.startswith("__")]
+            if funcs:
+                fn = funcs[-1]
+        
+        if not callable(fn):
             raise Exception("No callable solution found. Define solve(...).")
         output = fn(*test.get("args", []))
         results.append({"output": normalize(output), "error": None})
@@ -181,6 +186,12 @@ public class Harness {
                     method.setAccessible(true);
                     return method;
                 }
+            }
+        }
+        for (Method method : solutionClass.getDeclaredMethods()) {
+            if (method.getParameterCount() == argCount && !method.getName().contains("$")) {
+                method.setAccessible(true);
+                return method;
             }
         }
         throw new Exception("No callable solution found. Define solve(...).");
