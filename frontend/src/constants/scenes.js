@@ -42,7 +42,7 @@ export const SCENES = {
             "Welcome to the brutalist Training Arena.",
             "Matrix green binary cascades down pitted concrete walls.",
             "Master the ordered floating data blocks to construct the Array.",
-            "Your training begins now.",
+            "Your training begins NOW.",
         ],
         
     },
