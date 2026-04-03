@@ -7,9 +7,12 @@ import { DISTRICTS } from "../constants/districts";
 import { ACHIEVEMENTS } from "../constants/achievements";
 import { useUser } from "../contexts/useUser";
 import Btn from "../components/Btn";
+import ProfileModal from "../components/ProfileModal";
+import { useState } from "react";
 
 export default function Dashboard({ user, onNav }) {
     const { logout } = useUser();
+    const [showProfileModal, setShowProfileModal] = useState(false);
     const lvl = xpToLevel(user.xp);
     const doneToday = hasCompletedDailyToday(user);
     return (
@@ -19,7 +22,13 @@ export default function Dashboard({ user, onNav }) {
                 {/* Header */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                        <div style={{ width: 70, height: 70, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "2px solid #00d4ff", boxShadow: "0 0 20px rgba(0,212,255,.4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}>
+                        <div 
+                            onClick={() => setShowProfileModal(true)}
+                            title="Edit Profile"
+                            style={{ cursor: "pointer", transition: "all 0.2s", transform: "scale(1)", width: 70, height: 70, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "2px solid #00d4ff", boxShadow: "0 0 20px rgba(0,212,255,.4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}
+                            onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
+                            onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+                        >
                             {user.avatar?.face || "🤖"}
                         </div>
                         <div>
@@ -70,7 +79,9 @@ export default function Dashboard({ user, onNav }) {
                                 const unlocked = d.id <= user.unlockedLevel;
                                 return (
                                     <div key={d.id} style={{ padding: 10, background: "rgba(0,15,30,.6)", border: `1px solid ${unlocked ? d.color + "44" : "rgba(255,255,255,.06)"}`, opacity: unlocked ? 1 : 0.35 }}>
-                                        <div style={{ fontSize: 22, marginBottom: 4 }}>{d.icon}</div>
+                                        <div style={{ fontSize: 22, height: 28, marginBottom: 4, display: "flex", alignItems: "center" }}>
+                                            {d.logo ? <img src={d.logo} alt={d.name} style={{ height: "100%", width: "auto", objectFit: "contain", filter: unlocked ? `drop-shadow(0 0 6px ${d.color}aa)` : "grayscale(100%)" }} /> : d.icon}
+                                        </div>
                                         <div className="ORB" style={{ fontSize: 9, color: unlocked ? d.color : "rgba(160,180,200,.4)", letterSpacing: ".08em" }}>{d.name}</div>
                                         <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.5)", marginTop: 2 }}>{done}/{total}</div>
                                         <div style={{ height: 3, background: "rgba(255,255,255,.08)", marginTop: 6 }}>
@@ -101,6 +112,13 @@ export default function Dashboard({ user, onNav }) {
                     </CyberCard>
                 </div>
             </div>
+            
+            {showProfileModal && (
+                <ProfileModal 
+                    user={user} 
+                    onClose={() => setShowProfileModal(false)}
+                />
+            )}
         </div>
     );
 }

@@ -113,7 +113,9 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
             <div style={{ position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
                     <Btn variant="ghost" size="sm" onClick={() => onNav("solo")}>← BACK</Btn>
-                    <div style={{ fontSize: 20 }}>{district.icon}</div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 24, fontSize: 20 }}>
+                        {district.logo ? <img src={district.logo} alt={district.name} style={{ height: "100%", width: "auto", objectFit: "contain", filter: `drop-shadow(0 0 4px ${district.color}66)` }} /> : district.icon}
+                    </div>
                     <div className="ORB" style={{ fontSize: 14, color: district.color, fontWeight: 700, letterSpacing: ".1em" }}>{district.name}</div>
                     <div style={{ flex: 1 }} />
                     <div style={{ display: "flex", gap: 8 }}>
