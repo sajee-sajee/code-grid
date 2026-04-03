@@ -5,8 +5,11 @@ import { hasCompletedDailyToday } from "../utils/dailyUtils";
 import { getQuestionCountForLevel, getSolvedCountForLevel } from "../utils/progressUtils";
 import { DISTRICTS } from "../constants/districts";
 import { ACHIEVEMENTS } from "../constants/achievements";
+import { useUser } from "../contexts/useUser";
+import Btn from "../components/Btn";
 
 export default function Dashboard({ user, onNav }) {
+    const { logout } = useUser();
     const lvl = xpToLevel(user.xp);
     const doneToday = hasCompletedDailyToday(user);
     return (
@@ -25,13 +28,16 @@ export default function Dashboard({ user, onNav }) {
                             <XBar val={levelXp(user.xp)} max={300} color="#00d4ff" />
                         </div>
                     </div>
-                    <div style={{ display: "flex", gap: 12 }}>
-                        {[{ v: user.solved.length, l: "SOLVED", c: "#00ff41" }, { v: `${user.streak}🔥`, l: "STREAK", c: "#ff6600" }, { v: user.duelWins || 0, l: "WINS", c: "#bf00ff" }].map((s, i) => (
-                            <div key={i} style={{ textAlign: "center", padding: "0 12px" }}>
-                                <div className="ORB" style={{ fontSize: 24, fontWeight: 700, color: s.c, textShadow: `0 0 8px ${s.c}` }}>{s.v}</div>
-                                <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.4)", letterSpacing: ".15em" }}>{s.l}</div>
-                            </div>
-                        ))}
+                    <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+                        <div style={{ display: "flex", gap: 12 }}>
+                            {[{ v: user.solved.length, l: "SOLVED", c: "#00ff41" }, { v: `${user.streak}🔥`, l: "STREAK", c: "#ff6600" }, { v: user.duelWins || 0, l: "WINS", c: "#bf00ff" }].map((s, i) => (
+                                <div key={i} style={{ textAlign: "center", padding: "0 12px" }}>
+                                    <div className="ORB" style={{ fontSize: 24, fontWeight: 700, color: s.c, textShadow: `0 0 8px ${s.c}` }}>{s.v}</div>
+                                    <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.4)", letterSpacing: ".15em" }}>{s.l}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <Btn variant="ghost" size="sm" onClick={() => { logout(); onNav("landing"); }} style={{ padding: "6px 12px", border: "1px solid rgba(255,0,51,.5)", color: "#ff0033", clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)" }}>LOGOUT</Btn>
                     </div>
                 </div>
 
