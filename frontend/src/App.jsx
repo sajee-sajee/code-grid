@@ -105,7 +105,6 @@ export default function App() {
   const [notification, setNotification] = useState(null);
   const [pendingScene, setPendingScene] = useState(null);
 
-  // Inject global CSS once
   useEffect(() => {
     const el = document.createElement("style");
     el.textContent = CSS_CONTENT;
