@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { SCENES } from "../constants/scenes";
+import { startTypingSound, stopTypingSound } from "../utils/audio";
 
 export default function CinematicScene({ sceneId, onSkip }) {
     const scene = SCENES[sceneId];
@@ -30,8 +31,13 @@ export default function CinematicScene({ sceneId, onSkip }) {
     }, [subtitleLine, sceneId]);
 
     useEffect(() => {
+        return () => stopTypingSound();
+    }, []);
+
+    useEffect(() => {
         const line = scene.lines[subtitleLine] || "";
         if (charIdx >= line.length) {
+            stopTypingSound();
             if (subtitleLine < scene.lines.length - 1) {
                 const t = setTimeout(() => setSubtitleLine((s) => s + 1), 900);
                 return () => clearTimeout(t);
@@ -40,10 +46,13 @@ export default function CinematicScene({ sceneId, onSkip }) {
                 return () => clearTimeout(t);
             }
         }
+        
+        startTypingSound();
+
         const t = setTimeout(() => {
             setTypedText(line.slice(0, charIdx + 1));
             setCharIdx((c) => c + 1);
-        }, 32);
+        }, 60);
         return () => clearTimeout(t);
     }, [charIdx, subtitleLine, scene.lines]);
 

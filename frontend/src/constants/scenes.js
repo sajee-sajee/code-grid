@@ -52,6 +52,7 @@ export const SCENES = {
         bgColor: "linear-gradient(180deg, #000c18 0%, #001830 40%, #000c18 100%)",
         bgEmoji: "🌆",
         bgAnim: "sceneBgPanLeft 7s ease-in-out infinite alternate",
+        fgImage: "/scenes/scene2_fg.png",
         fgEmoji: "🔤",
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
         accentColor: "#00d4ff",
