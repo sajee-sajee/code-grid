@@ -14,7 +14,6 @@ export const SCENES = {
         fgStyle: {
     width: "105%",           // Forces it to fill the container width
     height: "105%",          // Forces it to fill the container height
-          // Keeps your existing vertical constraint
     objectFit: "stretch",    // This is the "secret sauce" to force stretching
     display: "block"         // Removes any bottom whitespace/gaps
 },
@@ -32,7 +31,7 @@ export const SCENES = {
         id: 1,
         title: "TRAINING ZONE — DISTRICT 1",
         bgColor: "linear-gradient(180deg, #000c04 0%, #001a08 40%, #000c04 100%)",
-        bgEmoji: "🏟",
+        bgEmoji: "/scenes/BgScene02.png",
         bgAnim: "sceneBgZoomIn 7s ease-in-out forwards",
         fgImage: "/scenes/FgScene02.png",
         fgAnim: "sceneFgFloat 3.5s ease-in-out infinite",
