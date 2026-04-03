@@ -4,11 +4,20 @@ export const SCENES = {
         title: "GLOBAL NETWORK BREACH",
         bgColor: "linear-gradient(180deg, #000510 0%, #001828 40%, #000a14 100%)",
         bgImage: "/scenes/BgScene01.png",
+        showBgFallback: false,
         bgEmoji: "🌃",
         bgAnim: "sceneBgPanLeft 7s ease-in-out infinite alternate",
         fgImage: "/scenes/FgScene01.png",
+        showFgFallback: false,
         fgEmoji: "💻",
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
+        fgStyle: {
+    width: "105%",           // Forces it to fill the container width
+    height: "105%",          // Forces it to fill the container height
+          // Keeps your existing vertical constraint
+    objectFit: "stretch",    // This is the "secret sauce" to force stretching
+    display: "block"         // Removes any bottom whitespace/gaps
+},
         accentColor: "#00d4ff",
         glowColor: "rgba(0,212,255,0.3)",
         particles: ["⬡", "◈", "◉", "▣", "◫"],
@@ -43,6 +52,7 @@ export const SCENES = {
         bgColor: "linear-gradient(180deg, #000c18 0%, #001830 40%, #000c18 100%)",
         bgEmoji: "🌆",
         bgAnim: "sceneBgPanLeft 7s ease-in-out infinite alternate",
+        fgImage: "/scenes/scene2_fg.png",
         fgEmoji: "🔤",
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
         accentColor: "#00d4ff",

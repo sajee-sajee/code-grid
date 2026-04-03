@@ -6,16 +6,16 @@ const DAILY_POOL_IDS = ["d1", "d2", "d3", "d4"];
 // GET /api/daily — get today's daily question index
 router.get("/", auth, (req, res) => {
     const idx = Math.floor(Date.now() / 86400000) % DAILY_POOL_IDS.length;
-    res.json({ qId: DAILY_POOL_IDS[idx], done: req.user.dailyDone });
+    res.json({ qId: DAILY_POOL_IDS[idx], done: req.user.hasCompletedDailyToday() });
 });
 
 // POST /api/daily/complete — mark daily as done
 router.post("/complete", auth, async (req, res) => {
     try {
-        const { qId, xp } = req.body;
+        const { xp } = req.body;
         const user = req.user;
 
-        if (user.dailyDone) return res.json({ user: user.toPublic() });
+        if (user.hasCompletedDailyToday()) return res.json({ user: user.toPublic() });
 
         const now = new Date();
         const lastDate = user.lastDailyDate ? new Date(user.lastDailyDate) : null;

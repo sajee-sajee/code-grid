@@ -1,6 +1,6 @@
 export const DISTRICTS = [
     { id: 1, name: "Training Zone", topic: "Arrays", icon: "⚔️", color: "#00ff41", accent: "#003a10", story: "You enter the Training Zone. Basic data corruption detected. Arrays of hostile code block your path. Eliminate the threats, recruit." },
-    { id: 2, name: "String Market", topic: "Strings", icon: "🔤", color: "#00d4ff", accent: "#003040", story: "The String Market — a labyrinth of encoded messages. MegaCorp agents have scrambled the city's comm channels. Restore order through pattern mastery." },
+    { id: 2, name: "String Market", topic: "Strings", icon: "🔤", logo: "/assets/string_market.png", color: "#00d4ff", accent: "#003040", story: "The String Market — a labyrinth of encoded messages. MegaCorp agents have scrambled the city's comm channels. Restore order through pattern mastery." },
     { id: 3, name: "Recursion Lab", topic: "Recursion", icon: "🔁", color: "#bf00ff", accent: "#200040", story: "Deep inside the Recursion Lab, algorithms feed on themselves infinitely. You must master the loop-within-loop to proceed." },
     { id: 4, name: "Hash District", topic: "Hash Tables", icon: "🗄️", color: "#ffcc00", accent: "#3a2a00", story: "The Hash District — terabytes of corrupted data flood the city's memory banks. Only fast lookups can save the network now." },
     { id: 5, name: "Stack Tower", topic: "Stacks", icon: "🏗️", color: "#ff6600", accent: "#3a1500", story: "Stack Tower reaches into the smog. LIFO protocols govern everything here. The guardian pushes malicious packets — pop them before they overflow." },

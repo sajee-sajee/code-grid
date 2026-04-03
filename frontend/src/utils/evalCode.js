@@ -10,6 +10,14 @@ function getErrorMessage(error) {
 }
 
 function compileSolutionFactory(code) {
+    const fnMatch = code.match(/function\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*\(/);
+    const arrowMatch = code.match(/(?:const|let|var)\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=\s*(?:\([^)]*\)|[a-zA-Z_$][0-9a-zA-Z_$]*)\s*=>/);
+    const extractedName = (fnMatch && fnMatch[1]) || (arrowMatch && arrowMatch[1]);
+    
+    const dynamicCandidate = (extractedName && !["solve", "solution", "main"].includes(extractedName))
+        ? `(typeof ${extractedName} === "function" && ${extractedName}) || `
+        : "";
+
     return new Function(`
         "use strict";
         return function createSolve() {
@@ -19,7 +27,7 @@ function compileSolutionFactory(code) {
             ${code}
 
             const candidate =
-                (typeof solve === "function" && solve) ||
+                ${dynamicCandidate}(typeof solve === "function" && solve) ||
                 (typeof solution === "function" && solution) ||
                 (typeof main === "function" && main) ||
                 (typeof module.exports === "function" && module.exports) ||

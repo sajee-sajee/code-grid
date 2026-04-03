@@ -7,11 +7,12 @@ import { DISTRICTS } from "../constants/districts";
 import { QUESTIONS } from "../constants/questions";
 import { evalCode } from "../utils/evalCode";
 import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
+import { getNow } from "../utils/timeUtils";
 import { recordSolve } from "../services/api";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../contexts/useUser";
 
 export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
-    const { user, patchUser } = useUser();
+    const { user, setUser } = useUser();
     const district = DISTRICTS.find((d) => d.id === levelId);
     const questions = QUESTIONS[levelId] || [];
     const solvedInLevel = user.solved.filter((s) => s.levelId === levelId).map((s) => s.qId);
@@ -26,9 +27,10 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
     const [results, setResults] = useState(null);
     const [running, setRunning] = useState(false);
     const [hintIdx, setHintIdx] = useState(-1);
-    const [startTime] = useState(Date.now());
+    const [startTime, setStartTime] = useState(() => getNow());
     const [xpPopup, setXpPopup] = useState(null);
     const [levelDone, setLevelDone] = useState(false);
+    const [syncError, setSyncError] = useState("");
     const alreadySolved = q && solvedInLevel.includes(q.id);
     const code = codeByLanguage[language] || "";
 
@@ -39,6 +41,8 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
         setCodeByLanguage(buildStarterMap(nextQuestion));
         setResults(null);
         setHintIdx(-1);
+        setStartTime(getNow());
+        setSyncError("");
     };
 
     const handleLanguageChange = (nextLanguage) => {
@@ -73,6 +77,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
     );
 
     const runCode = () => {
+        setSyncError("");
         setRunning(true);
         setTimeout(async () => {
             const res = await evalCode(code, q.tests, language);
@@ -80,15 +85,23 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
             setRunning(false);
             const allPass = res.every((r) => r.passed);
             if (allPass && !alreadySolved) {
-                const elapsed = (Date.now() - startTime) / 1000;
-                const solveData = { qId: q.id, levelId, diff: q.diff, xp: q.xp, fast: elapsed < 60, ts: Date.now() };
-                try { await recordSolve(solveData); } catch (_) { }
-                patchUser({ xp: user.xp + q.xp, solved: [...user.solved, solveData] });
-                setXpPopup(`+${q.xp} XP`);
-                setTimeout(() => setXpPopup(null), 1500);
-                const newSolvedCount = solvedInLevel.length + 1;
-                if (newSolvedCount >= questions.length) {
-                    setTimeout(() => { onLevelComplete(levelId); setLevelDone(true); }, 1200);
+                const now = getNow();
+                const elapsed = (now - startTime) / 1000;
+                const solveData = { qId: q.id, levelId, diff: q.diff, xp: q.xp, fast: elapsed < 60, ts: now };
+                try {
+                    const { data } = await recordSolve(solveData);
+                    const updatedUser = data.user;
+                    const newSolvedCount = updatedUser.solved.filter((solve) => solve.levelId === levelId).length;
+
+                    setUser(updatedUser);
+                    setXpPopup(`+${q.xp} XP`);
+                    setTimeout(() => setXpPopup(null), 1500);
+
+                    if (newSolvedCount >= questions.length) {
+                        setTimeout(() => { onLevelComplete(levelId); setLevelDone(true); }, 1200);
+                    }
+                } catch {
+                    setSyncError("Tests passed, but progress could not be saved.");
                 }
             }
         }, 400);
@@ -100,7 +113,9 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
             <div style={{ position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
                     <Btn variant="ghost" size="sm" onClick={() => onNav("solo")}>← BACK</Btn>
-                    <div style={{ fontSize: 20 }}>{district.icon}</div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: 24, fontSize: 20 }}>
+                        {district.logo ? <img src={district.logo} alt={district.name} style={{ height: "100%", width: "auto", objectFit: "contain", filter: `drop-shadow(0 0 4px ${district.color}66)` }} /> : district.icon}
+                    </div>
                     <div className="ORB" style={{ fontSize: 14, color: district.color, fontWeight: 700, letterSpacing: ".1em" }}>{district.name}</div>
                     <div style={{ flex: 1 }} />
                     <div style={{ display: "flex", gap: 8 }}>
@@ -168,6 +183,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                             </Btn>
                             <Btn variant="ghost" size="sm" onClick={() => { updateCode(starterMap[language]); setResults(null); }}>↺ RESET</Btn>
                         </div>
+                        {syncError && <div className="MONO gR" style={{ fontSize: 11 }}>{syncError}</div>}
                         {results && (
                             <CyberCard style={{ padding: 16 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>
                                 <div className="ORB" style={{ fontSize: 12, letterSpacing: ".12em", marginBottom: 12, color: results.every((r) => r.passed) ? "#00ff41" : "#ff0033" }}>

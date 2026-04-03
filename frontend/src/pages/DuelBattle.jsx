@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import CyberCard from "../components/CyberCard";
 import Btn from "../components/Btn";
 import CodeEditor from "../components/CodeEditor";
@@ -8,7 +8,7 @@ import { evalCode } from "../utils/evalCode";
 import { getQuestionSet, pickNextQuestion } from "../utils/questionSets";
 import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
 
-export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
+export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
     const topicDistrict = DISTRICTS.find((d) => d.topic === duelConfig.topic);
     const levelId = duelConfig.levelId || topicDistrict?.id || 1;
     const questionSet = getQuestionSet(levelId, duelConfig.diff);
@@ -26,6 +26,11 @@ export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
     const [finished, setFinished] = useState(false);
     const cpuDelay = duelConfig.diff === "Easy" ? 60 : duelConfig.diff === "Medium" ? 100 : 150;
     const code = codeByLanguage[language] || "";
+    const battleStateRef = useRef({ cpuDone: false, cpuScore: 0, finished: false, playerScore: 0, running: false });
+
+    useEffect(() => {
+        battleStateRef.current = { cpuDone, cpuScore, finished, playerScore, running: battleStateRef.current.running };
+    }, [cpuDone, cpuScore, finished, playerScore]);
 
     const handleLanguageChange = (nextLanguage) => {
         setLanguage(nextLanguage);
@@ -41,39 +46,66 @@ export default function DuelBattle({ user, duelConfig, onNav, onDuelEnd }) {
         setCodeByLanguage((prev) => ({ ...prev, [language]: nextCode }));
     };
 
-    const finalize = useCallback((ps = playerScore, cs = cpuScore) => {
-        if (!finished) { setFinished(true); onDuelEnd({ won: ps > cs, playerScore: ps, cpuScore: cs, question: q }); }
-    }, [playerScore, cpuScore, finished]);
+    const finalize = useCallback((nextPlayerScore = battleStateRef.current.playerScore, nextCpuScore = battleStateRef.current.cpuScore) => {
+        if (battleStateRef.current.finished) return;
+
+        battleStateRef.current.finished = true;
+        setFinished(true);
+        onDuelEnd({
+            won: nextPlayerScore > nextCpuScore,
+            isTie: nextPlayerScore === nextCpuScore,
+            playerScore: nextPlayerScore,
+            cpuScore: nextCpuScore,
+            question: q,
+        });
+    }, [onDuelEnd, q]);
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setTimeLeft((t) => { if (t <= 1) { clearInterval(timer); finalize(); return 0; } return t - 1; });
+            setTimeLeft((t) => {
+                if (battleStateRef.current.running || battleStateRef.current.finished) return t;
+                if (t <= 1) { clearInterval(timer); finalize(); return 0; }
+                return t - 1;
+            });
         }, 1000);
         return () => clearInterval(timer);
-    }, []);
+    }, [finalize]);
 
     useEffect(() => {
         const cpuTimer = setInterval(() => {
             setCpuProgress((p) => {
+                if (battleStateRef.current.finished || battleStateRef.current.cpuDone || battleStateRef.current.running) {
+                    return p;
+                }
+
                 const next = p + (100 / cpuDelay);
-                if (next >= 100 && !cpuDone) { setCpuDone(true); setCpuScore(Math.floor(200 + Math.random() * 80)); }
+                if (next >= 100) {
+                    const nextCpuScore = Math.floor(200 + Math.random() * 80);
+                    battleStateRef.current.cpuDone = true;
+                    battleStateRef.current.cpuScore = nextCpuScore;
+                    setCpuDone(true);
+                    setCpuScore(nextCpuScore);
+                }
                 return Math.min(100, next);
             });
         }, 1000);
         return () => clearInterval(cpuTimer);
-    }, []);
+    }, [cpuDelay]);
 
     const run = () => {
         if (finished) return;
         setRunning(true);
+        battleStateRef.current.running = true;
         setTimeout(() => {
             Promise.resolve(evalCode(code, q.tests, language)).then((res) => {
                 setResults(res);
                 setRunning(false);
+                battleStateRef.current.running = false;
                 if (res.every((r) => r.passed)) {
                     const score = 200 + Math.floor(timeLeft * 1.2);
+                    battleStateRef.current.playerScore = score;
                     setPlayerScore(score);
-                    finalize(score, cpuScore);
+                    finalize(score);
                 }
             });
         }, 400);

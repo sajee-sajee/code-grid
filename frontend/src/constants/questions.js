@@ -6,7 +6,7 @@ export const QUESTIONS = {
             examples: [{ i: "nums=[2,7,11,15], target=9", o: "[0,1]", e: "nums[0]+nums[1]=2+7=9" }, { i: "nums=[3,2,4], target=6", o: "[1,2]" }],
             hints: ["Try using an object to store values you've seen", "For each num, check if (target-num) exists in your map", "Store {value: index} pairs as you iterate"],
             start: "function solve(nums, target) {\n  // Return array of two indices\n  \n}",
-            tests: [{ l: "Basic case", r: (f) => f([2, 7, 11, 15], 9), e: [0, 1] }, { l: "Middle elements", r: (f) => f([3, 2, 4], 6), e: [1, 2] }, { l: "Duplicates", r: (f) => f([3, 3], 6), e: [0, 1] }, { l: "Larger array", r: (f) => f([1, 5, 3, 7, 9, 2], 8), e: [1, 5] }],
+            tests: [{ l: "Basic case", r: (f) => f([2, 7, 11, 15], 9), e: [0, 1] }, { l: "Middle elements", r: (f) => f([3, 2, 4], 6), e: [1, 2] }, { l: "Duplicates", r: (f) => f([3, 3], 6), e: [0, 1] }, { l: "Larger array", r: (f) => f([1, 5, 3, 7, 9, 2], 7), e: [1, 5] }],
         },
         {
             id: "1b", title: "Max Subarray", diff: "Easy", xp: 120,

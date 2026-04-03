@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import ProfileSetupPage from "./pages/ProfileSetupPage";
@@ -11,8 +10,10 @@ import DuelSetupPage from "./pages/DuelSetupPage";
 import DuelBattle from "./pages/DuelBattle";
 import DuelResult from "./pages/DuelResult";
 import CinematicScene from "./components/CinematicScene";
-import { useUser } from "./contexts/UserContext";
-import { recordSolve } from "./services/api";
+import { useUser } from "./contexts/useUser";
+import { recordDuelEnd } from "./services/api";
+import { normalizeDuelResult } from "./utils/duelOutcome";
+import { DISTRICTS } from "./constants/districts";
 
 const CSS_CONTENT = `
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -96,7 +97,7 @@ select{background:rgba(0,8,18,.9)!important;border:1px solid rgba(0,212,255,.35)
 `;
 
 export default function App() {
-  const { user, patchUser, loading } = useUser();
+  const { user, patchUser, setUser, loading } = useUser();
   const [screen, setScreen] = useState("landing");
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [duelConfig, setDuelConfig] = useState(null);
@@ -111,19 +112,36 @@ export default function App() {
     return () => document.head.removeChild(el);
   }, []);
 
-  // Redirect to dashboard if already logged in
-  useEffect(() => {
-    if (!loading && user && (screen === "landing" || screen === "login" || screen === "signup")) {
-      setScreen("dashboard");
-    }
-  }, [loading, user]);
+  const activeScreen = !loading && user && (screen === "landing" || screen === "login" || screen === "signup")
+    ? "dashboard"
+    : screen;
 
   const showNotif = (msg, color = "#00ff41") => {
     setNotification({ msg, color });
     setTimeout(() => setNotification(null), 3000);
   };
 
-  const nav = (target) => setScreen(target);
+  const nav = (target) => {
+    if (target === "next-district") {
+      const nextLevelId = Math.min(11, (duelConfig?.levelId || 1) + 1);
+      const nextDistrict = DISTRICTS.find(d => d.id === nextLevelId);
+      if (nextDistrict) {
+        setDuelConfig({ topic: nextDistrict.topic, diff: duelConfig?.diff || "Easy", levelId: nextLevelId });
+        const alreadySeen = user?.seenScenes?.includes(nextLevelId);
+        if (!alreadySeen) {
+          patchUser({ seenScenes: [...(user.seenScenes || []), nextLevelId] });
+          setPendingScene({ sceneId: nextLevelId, nextScreen: "duel-battle" });
+          setScreen("scene");
+        } else {
+          setScreen("duel-battle");
+        }
+        return;
+      }
+      setScreen("dashboard");
+      return;
+    }
+    setScreen(target);
+  };
 
   const handleAuthSuccess = (user, isNew) => {
     if (isNew) {
@@ -140,14 +158,28 @@ export default function App() {
   };
 
   const handleLevelComplete = (levelId) => {
-    patchUser({ unlockedLevel: Math.max(user.unlockedLevel, levelId + 1), xp: user.xp + 200 });
     showNotif(`District ${levelId} cleared! +200 XP bonus!`, "#00d4ff");
   };
 
   const handleDuelEnd = (result) => {
-    setDuelResult(result);
-    showNotif(result.won ? "⚔️ VICTORY! +50 XP" : "💀 Defeated. Train harder.", result.won ? "#00ff41" : "#ff0033");
+    const nextResult = normalizeDuelResult(result);
+
+    setDuelResult(nextResult);
     setScreen("duel-result");
+    showNotif(
+      nextResult.isTie ? "⚖️ Draw! Scores matched." : nextResult.won ? "⚔️ VICTORY!" : "💀 Defeated. Train harder.",
+      nextResult.isTie ? "#ffcc00" : nextResult.won ? "#00ff41" : "#ff0033",
+    );
+
+    recordDuelEnd({
+      won: nextResult.won,
+      playerScore: nextResult.playerScore,
+      cpuScore: nextResult.cpuScore,
+    })
+      .then((res) => setUser(res.data.user))
+      .catch(() => {
+        showNotif("Battle finished, but the duel result could not be saved.", "#ffcc00");
+      });
   };
 
   const handleSelectLevel = (levelId) => {
@@ -190,21 +222,21 @@ export default function App() {
       )}
 
       {/* Cinematic Scene Overlay */}
-      {screen === "scene" && pendingScene && (
+      {activeScreen === "scene" && pendingScene && (
         <CinematicScene sceneId={pendingScene.sceneId} onSkip={handleSceneComplete} />
       )}
 
-      {screen === "landing" && <LandingPage onNav={nav} />}
-      {screen === "login" && <AuthPage mode="login" onNav={nav} onSuccess={handleAuthSuccess} />}
-      {screen === "signup" && <AuthPage mode="signup" onNav={nav} onSuccess={handleAuthSuccess} />}
-      {screen === "profile-setup" && user && <ProfileSetupPage onComplete={handleProfileComplete} />}
-      {screen === "dashboard" && user && <Dashboard user={user} onNav={nav} />}
-      {screen === "solo" && user && <SoloPage user={user} onNav={nav} onSelectLevel={handleSelectLevel} />}
-      {screen === "level-questions" && user && <LevelQuestions levelId={selectedLevel} onNav={nav} onLevelComplete={handleLevelComplete} />}
-      {screen === "daily" && user && <DailyQuestPage onNav={nav} />}
-      {screen === "duel-setup" && user && <DuelSetupPage onNav={nav} onStartDuel={(cfg) => { setDuelConfig(cfg); nav("duel-battle"); }} />}
-      {screen === "duel-battle" && user && duelConfig && <DuelBattle user={user} duelConfig={duelConfig} onNav={nav} onDuelEnd={handleDuelEnd} />}
-      {screen === "duel-result" && user && duelResult && <DuelResult result={duelResult} onNav={nav} />}
+      {activeScreen === "landing" && <LandingPage onNav={nav} />}
+      {activeScreen === "login" && <AuthPage mode="login" onNav={nav} onSuccess={handleAuthSuccess} />}
+      {activeScreen === "signup" && <AuthPage mode="signup" onNav={nav} onSuccess={handleAuthSuccess} />}
+      {activeScreen === "profile-setup" && user && <ProfileSetupPage onComplete={handleProfileComplete} />}
+      {activeScreen === "dashboard" && user && <Dashboard user={user} onNav={nav} />}
+      {activeScreen === "solo" && user && <SoloPage user={user} onNav={nav} onSelectLevel={handleSelectLevel} />}
+      {activeScreen === "level-questions" && user && <LevelQuestions levelId={selectedLevel} onNav={nav} onLevelComplete={handleLevelComplete} />}
+      {activeScreen === "daily" && user && <DailyQuestPage onNav={nav} />}
+      {activeScreen === "duel-setup" && user && <DuelSetupPage onNav={nav} onStartDuel={(cfg) => { setDuelConfig(cfg); nav("duel-battle"); }} />}
+      {activeScreen === "duel-battle" && user && duelConfig && <DuelBattle user={user} duelConfig={duelConfig} onDuelEnd={handleDuelEnd} />}
+      {activeScreen === "duel-result" && user && duelResult && <DuelResult result={duelResult} onNav={nav} />}
     </div>
   );
 }

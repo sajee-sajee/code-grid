@@ -6,19 +6,23 @@ import LanguagePicker from "../components/LanguagePicker";
 import { DAILY_POOL } from "../constants/achievements";
 import { evalCode } from "../utils/evalCode";
 import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
+import { hasCompletedDailyToday } from "../utils/dailyUtils";
+import { getNow, getTodayIsoDate } from "../utils/timeUtils";
 import { completeDaily } from "../services/api";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../contexts/useUser";
 
 export default function DailyQuestPage({ onNav }) {
-    const { user, patchUser } = useUser();
-    const [q] = useState(() => DAILY_POOL[Math.floor(Date.now() / 86400000) % DAILY_POOL.length]);
+    const { user, setUser } = useUser();
+    const [q] = useState(() => DAILY_POOL[Math.floor(getNow() / 86400000) % DAILY_POOL.length]);
+    const [dailyLabel] = useState(() => getTodayIsoDate());
     const starterMap = buildStarterMap(q);
     const [language, setLanguage] = useState("javascript");
     const [codeByLanguage, setCodeByLanguage] = useState(() => buildStarterMap(q));
     const [results, setResults] = useState(null);
     const [running, setRunning] = useState(false);
     const [hintShown, setHintShown] = useState(false);
-    const done = user.dailyDone;
+    const [syncError, setSyncError] = useState("");
+    const done = hasCompletedDailyToday(user);
     const code = codeByLanguage[language] || "";
 
     const handleLanguageChange = (nextLanguage) => {
@@ -36,6 +40,7 @@ export default function DailyQuestPage({ onNav }) {
     };
 
     const run = () => {
+        setSyncError("");
         setRunning(true);
         setTimeout(async () => {
             const res = await evalCode(code, q.tests, language);
@@ -43,11 +48,12 @@ export default function DailyQuestPage({ onNav }) {
             setRunning(false);
             if (res.every((r) => r.passed) && !done) {
                 const xpGain = q.xp + 20;
-                try { await completeDaily({ qId: q.id, xp: xpGain }); } catch (_) { }
-                const now = new Date();
-                const lastDate = user.lastDailyDate ? new Date(user.lastDailyDate) : null;
-                const newStreak = lastDate && (now - lastDate) < 172800000 ? user.streak + 1 : 1;
-                patchUser({ xp: user.xp + xpGain, dailyDone: true, streak: newStreak, lastDailyDate: now.toISOString() });
+                try {
+                    const { data } = await completeDaily({ qId: q.id, xp: xpGain });
+                    setUser(data.user);
+                } catch {
+                    setSyncError("Daily quest passed locally, but the reward could not be saved.");
+                }
             }
         }, 400);
     };
@@ -100,7 +106,7 @@ export default function DailyQuestPage({ onNav }) {
                         <CyberCard style={{ padding: 0, overflow: "hidden" }}>
                             <div style={{ padding: "10px 16px", background: "rgba(255,200,0,.05)", borderBottom: "1px solid rgba(255,200,0,.2)", display: "flex", gap: 8 }}>
                                 <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)", letterSpacing: ".15em" }}>DAILY_{new Date().toISOString().slice(0, 10)}.{getFileExtension(language)}</span>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)", letterSpacing: ".15em" }}>DAILY_{dailyLabel}.{getFileExtension(language)}</span>
                                 <div style={{ marginLeft: "auto" }}>
                                     <LanguagePicker value={language} onChange={handleLanguageChange} />
                                 </div>
@@ -111,6 +117,7 @@ export default function DailyQuestPage({ onNav }) {
                         <Btn variant={done ? "ghost" : "g"} onClick={run} disabled={running || done} style={{ justifyContent: "center" }}>
                             {done ? "✓ QUEST COMPLETED" : running ? "⏳ RUNNING..." : "▶ SUBMIT SOLUTION"}
                         </Btn>
+                        {syncError && <div className="MONO gR" style={{ fontSize: 11 }}>{syncError}</div>}
                         {results && (
                             <CyberCard style={{ padding: 14 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>
                                 {results.map((r, i) => (

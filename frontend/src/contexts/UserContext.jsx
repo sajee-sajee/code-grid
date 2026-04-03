@@ -1,23 +1,42 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProfile, login as apiLogin, register as apiRegister, updateProfile } from "../services/api";
+import { UserContext } from "./user-context";
 
-const UserContext = createContext(null);
+function readStoredToken() {
+    try {
+        return localStorage.getItem("cg_token");
+    } catch {
+        return null;
+    }
+}
 
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(() => Boolean(readStoredToken()));
 
     // On app load, try to restore session from stored token
     useEffect(() => {
-        const token = localStorage.getItem("cg_token");
-        if (token) {
-            getProfile()
-                .then((res) => setUser(res.data.user))
-                .catch(() => localStorage.removeItem("cg_token"))
-                .finally(() => setLoading(false));
-        } else {
-            setLoading(false);
-        }
+        const token = readStoredToken();
+        if (!token) return;
+
+        let cancelled = false;
+
+        getProfile()
+            .then((res) => {
+                if (!cancelled) {
+                    setUser(res.data.user);
+                }
+            })
+            .catch(() => localStorage.removeItem("cg_token"))
+            .finally(() => {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const login = async (email, password) => {
@@ -55,8 +74,4 @@ export function UserProvider({ children }) {
             {children}
         </UserContext.Provider>
     );
-}
-
-export function useUser() {
-    return useContext(UserContext);
 }
