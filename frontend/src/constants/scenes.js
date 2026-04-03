@@ -31,7 +31,7 @@ export const SCENES = {
         id: 1,
         title: "TRAINING ZONE — DISTRICT 1",
         bgColor: "linear-gradient(180deg, #000c04 0%, #001a08 40%, #000c04 100%)",
-        bgEmoji: "/scenes/BgScene02.png",
+        bgImage: "/scenes/BgScene02.png",
         bgAnim: "sceneBgZoomIn 7s ease-in-out forwards",
         fgImage: "/scenes/FgScene02.png",
         fgAnim: "sceneFgFloat 3.5s ease-in-out infinite",
@@ -44,6 +44,7 @@ export const SCENES = {
             "Master the ordered floating data blocks to construct the Array.",
             "Your training begins now.",
         ],
+        
     },
     2: {
         id: 2,
