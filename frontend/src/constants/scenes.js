@@ -52,7 +52,8 @@ export const SCENES = {
         bgColor: "linear-gradient(180deg, #000c18 0%, #001830 40%, #000c18 100%)",
         bgEmoji: "🌆",
         bgAnim: "sceneBgPanLeft 7s ease-in-out infinite alternate",
-        fgImage: "/scenes/scene2_fg.png",
+        fgImage: "/scenes/FgScene03.png",
+        bgImage: "/scenes/BgScene03.png",
         fgEmoji: "🔤",
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
         accentColor: "#00d4ff",
@@ -64,6 +65,12 @@ export const SCENES = {
             "The chaotic string streams block further transmission.",
             "Decode the text fragments to restore communication.",
         ],
+    fgStyle: {
+    width: "105%",           // Forces it to fill the container width
+    height: "105%",          // Forces it to fill the container height
+    objectFit: "stretch",    // This is the "secret sauce" to force stretching
+    display: "block"         // Removes any bottom whitespace/gaps
+        },
     },
     3: {
         id: 3,
