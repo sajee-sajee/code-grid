@@ -25,10 +25,10 @@ export default function LandingPage({ onNav }) {
                 <div className="ORB gG aGlitch" style={{ fontSize: "clamp(28px,5vw,56px)", fontWeight: 900, letterSpacing: ".12em", lineHeight: 1.1, marginBottom: 8 }}>
                     CODERS GUILD
                 </div>
-                <div className="ORB" style={{ fontSize: "clamp(10px,1.5vw,14px)", color: "rgba(0,212,255,.7)", letterSpacing: ".4em", marginBottom: 32, fontFamily: "Share Tech Mono,monospace" }}>
+                <div className="ORB" style={{ fontSize: "clamp(10px,1.5vw,14px)", color: "rgba(0,212,255,.7)", letterSpacing: ".4em", marginBottom: 32, fontFamily: "Share Tech Mono,monospace", wordBreak: "break-all", padding: "0 16px" }}>
                     {scrambled}
                 </div>
-                <div className="MONO" style={{ fontSize: 16, color: "rgba(160,180,200,.8)", maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.8 }}>
+                <div className="MONO" style={{ fontSize: 16, color: "rgba(160,180,200,.8)", maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.8, padding: "0 16px" }}>
                     In a world controlled by MegaCorp algorithms, the <span className="gG">Coders Guild</span> trains elite programmers to reclaim the network.
                     <br />Your mission begins now, recruit.
                 </div>
