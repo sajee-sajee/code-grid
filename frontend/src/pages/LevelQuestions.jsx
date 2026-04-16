@@ -15,7 +15,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
     const { user, setUser } = useUser();
     const district = DISTRICTS.find((d) => d.id === levelId);
     const questions = QUESTIONS[levelId] || [];
-    const solvedInLevel = user.solved.filter((s) => s.levelId === levelId).map((s) => s.qId);
+    const solvedInLevel = (user?.solved || []).filter((s) => s.levelId === levelId).map((s) => s.qId);
     const [qIdx, setQIdx] = useState(() => {
         const f = questions.findIndex((q) => !solvedInLevel.includes(q.id));
         return f >= 0 ? f : 0;
@@ -68,7 +68,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                 <div className="aLevelUp" style={{ fontSize: 80, marginBottom: 24 }}>🏆</div>
                 <div className="ORB gG" style={{ fontSize: 28, fontWeight: 700, letterSpacing: ".12em", marginBottom: 8 }}>DISTRICT CLEARED</div>
                 <div className="MONO" style={{ fontSize: 14, color: "rgba(0,212,255,.6)", marginBottom: 32 }}>{district.name.toUpperCase()} LIBERATED</div>
-                <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
                     {levelId < 11 && <Btn variant="g" onClick={() => onNav("solo")}>▶ NEXT DISTRICT</Btn>}
                     <Btn variant="ghost" onClick={() => onNav("dashboard")}>DASHBOARD</Btn>
                 </div>
@@ -108,7 +108,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
     };
 
     return (
-        <div style={{ minHeight: "100vh", padding: 16, maxWidth: 1400, margin: "0 auto" }}>
+        <div style={{ minHeight: "100vh", padding: 16, maxWidth: 1400, margin: "0 auto", overflowX: "hidden" }}>
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
             <div style={{ position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
@@ -118,7 +118,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                     </div>
                     <div className="ORB" style={{ fontSize: 14, color: district.color, fontWeight: 700, letterSpacing: ".1em" }}>{district.name}</div>
                     <div style={{ flex: 1 }} />
-                    <div style={{ display: "flex", gap: 8 }}>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                         {questions.map((qq, i) => (
                             <div key={i} onClick={() => handleQSwitch(i)}
                                 style={{ width: 36, height: 36, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: solvedInLevel.includes(qq.id) ? "rgba(0,255,65,.2)" : qIdx === i ? "rgba(0,212,255,.15)" : "rgba(0,8,18,.9)", border: solvedInLevel.includes(qq.id) ? "1px solid #00ff41" : qIdx === i ? `1px solid ${district.color}` : "1px solid rgba(255,255,255,.1)", color: solvedInLevel.includes(qq.id) ? "#00ff41" : qIdx === i ? district.color : "rgba(160,180,200,.5)", fontFamily: "Orbitron,monospace", fontSize: 12, fontWeight: 700, transition: "all .2s" }}>
@@ -127,9 +127,9 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                         ))}
                     </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))", gap: 16 }}>
                     {/* Problem panel */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12, minWidth: 0 }}>
                         <CyberCard style={{ padding: 24 }} color={district.color}>
                             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                                 <div className="ORB" style={{ fontSize: 17, color: "#e0e8f0", fontWeight: 700 }}>{q.title}</div>
