@@ -7,6 +7,7 @@ import { DISTRICTS } from "../constants/districts";
 import { evalCode } from "../utils/evalCode";
 import { getQuestionSet, pickNextQuestion } from "../utils/questionSets";
 import { buildStarterMap, getFileExtension } from "../utils/languageSupport";
+import AvatarView from "../components/AvatarView";
 
 export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
     const topicDistrict = DISTRICTS.find((d) => d.topic === duelConfig.topic);
@@ -123,7 +124,9 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
                 {/* Header */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1 }}>
-                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "2px solid #00ff41", boxShadow: "0 0 15px rgba(0,255,65,.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>{user.avatar?.face || "🤖"}</div>
+                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "2px solid #00ff41", boxShadow: "0 0 15px rgba(0,255,65,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <AvatarView avatar={user.avatar} size={50} />
+                        </div>
                         <div>
                             <div className="ORB gG" style={{ fontSize: 14, fontWeight: 700 }}>{user.username}</div>
                             <div className="MONO gG" style={{ fontSize: 20, fontWeight: 700 }}>{playerScore}</div>

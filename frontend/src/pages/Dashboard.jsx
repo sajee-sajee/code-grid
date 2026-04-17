@@ -8,6 +8,7 @@ import { ACHIEVEMENTS } from "../constants/achievements";
 import { useUser } from "../contexts/useUser";
 import Btn from "../components/Btn";
 import ProfileModal from "../components/ProfileModal";
+import AvatarView from "../components/AvatarView";
 import { useState } from "react";
 
 export default function Dashboard({ user, onNav }) {
@@ -25,11 +26,11 @@ export default function Dashboard({ user, onNav }) {
                         <div 
                             onClick={() => setShowProfileModal(true)}
                             title="Edit Profile"
-                            style={{ cursor: "pointer", transition: "all 0.2s", transform: "scale(1)", width: 70, height: 70, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "2px solid #00d4ff", boxShadow: "0 0 20px rgba(0,212,255,.4)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}
+                            style={{ cursor: "pointer", transition: "all 0.2s", transform: "scale(1)", display: "flex" }}
                             onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
                             onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
                         >
-                            {user.avatar?.face || "🤖"}
+                            <AvatarView avatar={user.avatar} size={70} />
                         </div>
                         <div>
                             <div className="ORB gC" style={{ fontSize: 20, fontWeight: 700 }}>{user.username}</div>
