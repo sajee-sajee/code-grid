@@ -49,14 +49,6 @@ function readExpression(source, startIndex, endChar, initialDepths = {}) {
     return source.slice(startIndex);
 }
 
-function extractFunctionArgsText(source) {
-    const callIndex = source.indexOf("f(");
-    if (callIndex === -1) {
-        throw new Error("Unable to extract test arguments.");
-    }
-    return readExpression(source, callIndex + 2, ")", { paren: 1 });
-}
-
 function extractAssignedValue(source, variableName) {
     const assignmentIndex = source.indexOf(`const ${variableName} = `);
     if (assignmentIndex === -1) return null;
@@ -68,8 +60,26 @@ function evaluateExpression(expression) {
     return new Function(`return (${expression});`)();
 }
 
-function evaluateArgs(argsText) {
-    return new Function(`return [${argsText}];`)();
+function safeExtractArgs(testFunc, source) {
+    try {
+        let captured = [];
+        const mock = (...args) => { captured = args; return Object.assign([], { length: 0, sort:()=>[], map:()=>[] }); };
+        testFunc(mock);
+        if (captured.length > 0) return captured;
+    } catch (e) {
+        // ignore
+    }
+    
+    // Fallback if proxy failed
+    try {
+        const callIndex = source.indexOf("f(");
+        if (callIndex !== -1) {
+            const rawArgs = readExpression(source, callIndex + 2, ")", { paren: 1 });
+            return new Function(`return [${rawArgs}];`)();
+        }
+    } catch(e) {}
+    
+    return [];
 }
 
 function parseExpectedValue(source, expected) {
@@ -138,7 +148,7 @@ export function buildExecutionPlan(tests) {
         const comparator = detectComparator(source);
         const transform = detectTransform(source);
         const customArgs = extractAssignedValue(source, "a");
-        const args = customArgs ? [evaluateExpression(customArgs)] : evaluateArgs(extractFunctionArgsText(source));
+        const args = customArgs ? [evaluateExpression(customArgs)] : safeExtractArgs(test.r, source);
         const expected = comparator === "equals" ? 0 : parseExpectedValue(source, test.e);
         const expectedDisplay = comparator === "peakIndex" ? "valid peak index" : formatValue(applyOutputTransform(expected, transform));
 
