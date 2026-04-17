@@ -32,7 +32,11 @@ export default function ProfileSetupPage({ onComplete }) {
     const { saveProfile } = useUser();
 
     const submit = async () => {
-        if (username.trim().length < 3) { setErr("Username must be at least 3 characters"); return; }
+        const u = username.trim();
+        if (u.length < 3) { setErr("Username must be at least 3 characters"); return; }
+        if (!/^[a-zA-Z0-9]+$/.test(u)) { setErr("Username can only contain letters and numbers"); return; }
+        if (!/[a-zA-Z]/.test(u)) { setErr("Username must contain at least one letter"); return; }
+        
         setLoading(true);
         try {
             const avatar = { face: FACES[face], outfit: OUTFITS[outfit], acc: ACCS[acc] };
