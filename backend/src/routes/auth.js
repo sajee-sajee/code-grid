@@ -10,6 +10,7 @@ router.post("/register", async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ message: "Email and password required" });
+        if (!email.toLowerCase().endsWith("@gmail.com")) return res.status(400).json({ message: "Must use a @gmail.com address" });
         if (password.length < 4) return res.status(400).json({ message: "Password too short" });
 
         const existing = await User.findOne({ email: email.toLowerCase() });
@@ -29,6 +30,7 @@ router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ message: "Email and password required" });
+        if (!email.toLowerCase().endsWith("@gmail.com")) return res.status(400).json({ message: "Must use a @gmail.com address" });
 
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) return res.status(401).json({ message: "Invalid credentials" });

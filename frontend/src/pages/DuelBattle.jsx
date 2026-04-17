@@ -114,7 +114,7 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    const timerColor = timeLeft < 30 ? "#ff0033" : timeLeft < 60 ? "#ffcc00" : "#00ff41";
+    const timerColor = timeLeft < 30 ? "var(--red)" : timeLeft < 60 ? "var(--yellow)" : "var(--green)";
     const circumference = 2 * Math.PI * 45;
 
     return (
@@ -124,7 +124,7 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
                 {/* Header */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1 }}>
-                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "2px solid #00ff41", boxShadow: "0 0 15px rgba(0,255,65,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(var(--bg-panel-rgb),.9)", border: "2px solid var(--green)", boxShadow: "0 0 15px rgba(var(--green-rgb),.5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <AvatarView avatar={user.avatar} size={50} />
                         </div>
                         <div>
@@ -135,7 +135,7 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                         <div style={{ position: "relative", width: 100, height: 100 }}>
                             <svg width={100} height={100} style={{ transform: "rotate(-90deg)" }}>
-                                <circle cx={50} cy={50} r={45} fill="none" stroke="rgba(255,255,255,.1)" strokeWidth={6} />
+                                <circle cx={50} cy={50} r={45} fill="none" stroke="rgba(var(--white-rgb),.1)" strokeWidth={6} />
                                 <circle cx={50} cy={50} r={45} fill="none" stroke={timerColor} strokeWidth={6} strokeDasharray={circumference} strokeDashoffset={circumference * (1 - timeLeft / 180)} style={{ transition: "stroke-dashoffset 1s linear, stroke .5s", filter: `drop-shadow(0 0 6px ${timerColor})` }} />
                             </svg>
                             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -144,46 +144,46 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.4)", letterSpacing: ".2em" }}>⚔️ VS CPU</div>
+                        <div className="MONO" style={{ fontSize: 10, color: "rgba(var(--text-muted-rgb),.4)", letterSpacing: ".2em" }}>⚔️ VS CPU</div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, justifyContent: "flex-end" }}>
                         <div>
                             <div className="ORB gR" style={{ fontSize: 14, fontWeight: 700, textAlign: "right" }}>NEXUS-7 AI</div>
                             <div className="MONO gR" style={{ fontSize: 20, fontWeight: 700, textAlign: "right" }}>{cpuDone ? cpuScore : "?"}</div>
                         </div>
-                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(30,0,8,.9)", border: "2px solid #ff0033", boxShadow: "0 0 15px rgba(255,0,51,.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>🤖</div>
+                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(30,0,8,.9)", border: "2px solid var(--red)", boxShadow: "0 0 15px rgba(var(--red-rgb),.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>🤖</div>
                     </div>
                 </div>
                 {/* CPU Progress */}
                 <div style={{ marginBottom: 16 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span className="MONO" style={{ fontSize: 11, color: "rgba(160,180,200,.4)" }}>CPU ANALYSIS PROGRESS</span>
+                        <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.4)" }}>CPU ANALYSIS PROGRESS</span>
                         <span className="MONO gR" style={{ fontSize: 11 }}>{cpuDone ? "SOLVED ✓" : `${Math.floor(cpuProgress)}%`}</span>
                     </div>
-                    <div style={{ height: 4, background: "rgba(255,255,255,.06)" }}>
-                        <div style={{ width: `${cpuProgress}%`, height: "100%", background: "linear-gradient(90deg,#400010,#ff0033)", transition: "width .5s" }} />
+                    <div style={{ height: 4, background: "rgba(var(--white-rgb),.06)" }}>
+                        <div style={{ width: `${cpuProgress}%`, height: "100%", background: "linear-gradient(90deg,#400010,var(--red))", transition: "width .5s" }} />
                     </div>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <CyberCard style={{ padding: 24 }} color="#ff0033">
+                    <CyberCard style={{ padding: 24 }} color="var(--red)">
                         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                             <div className="ORB" style={{ fontSize: 16, color: "#e0e8f0" }}>{q.title}</div>
                             <span className={`badge-${q.diff === "Easy" ? "e" : q.diff === "Medium" ? "m" : "h"}`}>{q.diff}</span>
                         </div>
-                        <div className="MONO" style={{ fontSize: 13, color: "rgba(180,200,220,.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 12 }}>{q.desc}</div>
+                        <div className="MONO" style={{ fontSize: 13, color: "rgba(var(--text-muted-rgb),.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 12 }}>{q.desc}</div>
                         {q.examples.slice(0, 2).map((ex, i) => (
-                            <div key={i} style={{ background: "rgba(30,0,8,.6)", border: "1px solid rgba(255,0,51,.15)", padding: 10, marginBottom: 8 }}>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)" }}>Example {i + 1}</div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>In: <span style={{ color: "#ffcc00" }}>{ex.i}</span></div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Out: <span style={{ color: "#00ff41" }}>{ex.o}</span></div>
+                            <div key={i} style={{ background: "rgba(30,0,8,.6)", border: "1px solid rgba(var(--red-rgb),.15)", padding: 10, marginBottom: 8 }}>
+                                <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--red-rgb),.5)" }}>Example {i + 1}</div>
+                                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>In: <span style={{ color: "var(--yellow)" }}>{ex.i}</span></div>
+                                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>Out: <span style={{ color: "var(--green)" }}>{ex.o}</span></div>
                             </div>
                         ))}
                     </CyberCard>
                     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                         <CyberCard style={{ padding: 0, overflow: "hidden" }}>
-                            <div style={{ padding: "10px 16px", background: "rgba(255,0,51,.04)", borderBottom: "1px solid rgba(255,0,51,.2)", display: "flex", gap: 8, alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", letterSpacing: ".15em" }}>DUEL_BATTLE.{getFileExtension(language)}</span>
+                            <div style={{ padding: "10px 16px", background: "rgba(var(--red-rgb),.04)", borderBottom: "1px solid rgba(var(--red-rgb),.2)", display: "flex", gap: 8, alignItems: "center" }}>
+                                <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--red)" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--yellow)" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--green)" }} /></div>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--red-rgb),.5)", letterSpacing: ".15em" }}>DUEL_BATTLE.{getFileExtension(language)}</span>
                                 <div style={{ marginLeft: "auto" }}>
                                     <LanguagePicker value={language} onChange={handleLanguageChange} />
                                 </div>
@@ -195,10 +195,10 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
                             {finished ? "⚔️ BATTLE ENDED" : running ? "⏳ EXECUTING..." : "▶ SUBMIT ANSWER"}
                         </Btn>
                         {results && (
-                            <CyberCard style={{ padding: 12 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>
+                            <CyberCard style={{ padding: 12 }} color={results.every((r) => r.passed) ? "var(--green)" : "var(--red)"}>
                                 {results.map((r, i) => (
                                     <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0" }}>
-                                        <span className="MONO" style={{ fontSize: 11, color: "rgba(180,200,220,.5)" }}>{r.label}</span>
+                                        <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.5)" }}>{r.label}</span>
                                         <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 11 }}>{r.passed ? "✓" : r.error ? "Error" : `Got ${r.output}`}</span>
                                     </div>
                                 ))}

@@ -68,45 +68,45 @@ export default function DailyQuestPage({ onNav }) {
                     {done && <span className="MONO gG" style={{ fontSize: 12 }}>✓ COMPLETED TODAY</span>}
                 </div>
                 <div style={{ display: "flex", gap: 20, marginBottom: 24, flexWrap: "wrap" }}>
-                    <CyberCard style={{ padding: 20, flex: 1 }} color="#ffcc00">
+                    <CyberCard style={{ padding: 20, flex: 1 }} color="var(--yellow)">
                         <div style={{ textAlign: "center" }}>
                             <div className="ORB" style={{ fontSize: 40, color: "#ff6600", textShadow: "0 0 20px #ff6600" }}>{user.streak}🔥</div>
-                            <div className="MONO" style={{ fontSize: 12, color: "rgba(255,200,0,.6)", letterSpacing: ".2em" }}>DAY STREAK</div>
+                            <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--yellow-rgb),.6)", letterSpacing: ".2em" }}>DAY STREAK</div>
                         </div>
                     </CyberCard>
-                    <CyberCard style={{ padding: 20, flex: 3 }} color="#ffcc00">
+                    <CyberCard style={{ padding: 20, flex: 3 }} color="var(--yellow)">
                         <div className="ORB gY" style={{ fontSize: 14, letterSpacing: ".12em", marginBottom: 8 }}>STREAK CALENDAR</div>
                         <div style={{ display: "flex", gap: 6 }}>
                             {Array.from({ length: 14 }).map((_, i) => {
                                 const active = i >= 14 - user.streak;
-                                return <div key={i} style={{ flex: 1, height: 28, background: active ? "rgba(255,180,0,.3)" : "rgba(255,255,255,.05)", border: `1px solid ${active ? "rgba(255,180,0,.5)" : "rgba(255,255,255,.08)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>{active ? "🔥" : ""}</div>;
+                                return <div key={i} style={{ flex: 1, height: 28, background: active ? "rgba(var(--orange-rgb),.3)" : "rgba(var(--white-rgb),.05)", border: `1px solid ${active ? "rgba(var(--orange-rgb),.5)" : "rgba(var(--white-rgb),.08)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>{active ? "🔥" : ""}</div>;
                             })}
                         </div>
                     </CyberCard>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <CyberCard style={{ padding: 24 }} color="#ffcc00">
+                    <CyberCard style={{ padding: 24 }} color="var(--yellow)">
                         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
                             <div className="ORB" style={{ fontSize: 17, color: "#e0e8f0" }}>{q.title}</div>
                             <span className="badge-e">{q.diff}</span>
                             <span className="MONO gY" style={{ marginLeft: "auto", fontSize: 11 }}>+{q.xp + 20} XP</span>
                         </div>
-                        <div className="MONO" style={{ fontSize: 13, color: "rgba(180,200,220,.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 16 }}>{q.desc}</div>
+                        <div className="MONO" style={{ fontSize: 13, color: "rgba(var(--text-muted-rgb),.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 16 }}>{q.desc}</div>
                         {q.examples.map((ex, i) => (
-                            <div key={i} style={{ background: "rgba(0,15,30,.6)", border: "1px solid rgba(255,200,0,.15)", padding: 12, marginBottom: 8 }}>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)" }}>Example {i + 1}</div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Input: <span style={{ color: "#ffcc00" }}>{ex.i}</span></div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Output: <span style={{ color: "#00ff41" }}>{ex.o}</span></div>
+                            <div key={i} style={{ background: "rgba(var(--bg-panel-rgb),.6)", border: "1px solid rgba(var(--yellow-rgb),.15)", padding: 12, marginBottom: 8 }}>
+                                <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--yellow-rgb),.5)" }}>Example {i + 1}</div>
+                                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>Input: <span style={{ color: "var(--yellow)" }}>{ex.i}</span></div>
+                                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>Output: <span style={{ color: "var(--green)" }}>{ex.o}</span></div>
                             </div>
                         ))}
                         <Btn variant="ghost" size="sm" onClick={() => setHintShown((s) => !s)} style={{ marginTop: 8 }}>💡 Hint</Btn>
-                        {hintShown && q.hints.map((h, i) => <div key={i} className="MONO bgP" style={{ border: "1px solid rgba(191,0,255,.3)", padding: 10, marginTop: 6, fontSize: 12, color: "#e0c0ff" }}>{h}</div>)}
+                        {hintShown && q.hints.map((h, i) => <div key={i} className="MONO bgP" style={{ border: "1px solid rgba(var(--purple-rgb),.3)", padding: 10, marginTop: 6, fontSize: 12, color: "#e0c0ff" }}>{h}</div>)}
                     </CyberCard>
                     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                         <CyberCard style={{ padding: 0, overflow: "hidden" }}>
-                            <div style={{ padding: "10px 16px", background: "rgba(255,200,0,.05)", borderBottom: "1px solid rgba(255,200,0,.2)", display: "flex", gap: 8 }}>
-                                <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)", letterSpacing: ".15em" }}>DAILY_{dailyLabel}.{getFileExtension(language)}</span>
+                            <div style={{ padding: "10px 16px", background: "rgba(var(--yellow-rgb),.05)", borderBottom: "1px solid rgba(var(--yellow-rgb),.2)", display: "flex", gap: 8 }}>
+                                <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--red)" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--yellow)" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--green)" }} /></div>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--yellow-rgb),.5)", letterSpacing: ".15em" }}>DAILY_{dailyLabel}.{getFileExtension(language)}</span>
                                 <div style={{ marginLeft: "auto" }}>
                                     <LanguagePicker value={language} onChange={handleLanguageChange} />
                                 </div>
@@ -119,10 +119,10 @@ export default function DailyQuestPage({ onNav }) {
                         </Btn>
                         {syncError && <div className="MONO gR" style={{ fontSize: 11 }}>{syncError}</div>}
                         {results && (
-                            <CyberCard style={{ padding: 14 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>
+                            <CyberCard style={{ padding: 14 }} color={results.every((r) => r.passed) ? "var(--green)" : "var(--red)"}>
                                 {results.map((r, i) => (
-                                    <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-                                        <span className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.6)" }}>{r.label}</span>
+                                    <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(var(--white-rgb),.06)" }}>
+                                        <span className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.6)" }}>{r.label}</span>
                                         <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 12 }}>{r.passed ? "✓ PASS" : r.error ? `✗ ${r.error.slice(0, 30)}` : `✗ Got ${r.output}`}</span>
                                     </div>
                                 ))}

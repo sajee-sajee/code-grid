@@ -72,9 +72,9 @@ export default function CinematicScene({ sceneId, onSkip }) {
             }
             const scanY = ((frame * 2) % (canvas.height + 100)) - 50;
             const grad = ctx.createLinearGradient(0, scanY - 30, 0, scanY + 30);
-            grad.addColorStop(0, "rgba(0,255,65,0)");
-            grad.addColorStop(0.5, "rgba(0,212,255,.06)");
-            grad.addColorStop(1, "rgba(0,255,65,0)");
+            grad.addColorStop(0, "rgba(var(--green-rgb),0)");
+            grad.addColorStop(0.5, "rgba(var(--cyan-rgb),.06)");
+            grad.addColorStop(1, "rgba(var(--green-rgb),0)");
             ctx.fillStyle = grad;
             ctx.fillRect(0, scanY - 30, canvas.width, 60);
             frame++;
@@ -142,7 +142,7 @@ export default function CinematicScene({ sceneId, onSkip }) {
                     </div>
                 </div>
             </div>
-            <div style={{ position: "absolute", top: 24, right: 28, zIndex: 10, fontFamily: "'Share Tech Mono', monospace", fontSize: 11, color: "rgba(255,255,255,.35)", letterSpacing: ".15em", animation: "skipBlink 2s ease-in-out infinite", pointerEvents: "none" }}>Click to Skip &gt;&gt;</div>
+            <div style={{ position: "absolute", top: 24, right: 28, zIndex: 10, fontFamily: "'Share Tech Mono', monospace", fontSize: 11, color: "rgba(var(--white-rgb),.35)", letterSpacing: ".15em", animation: "skipBlink 2s ease-in-out infinite", pointerEvents: "none" }}>Click to Skip &gt;&gt;</div>
             {[{ t: 16, l: 16, bt: "borderTop", bl: "borderLeft" }, { b: 16, l: 16, bt: "borderBottom", bl: "borderLeft" }, { t: 16, r: 16, bt: "borderTop", bl: "borderRight" }, { b: 16, r: 16, bt: "borderBottom", bl: "borderRight" }].map((corner, i) => (
                 <div key={i} style={{ position: "absolute", top: corner.t, bottom: corner.b, left: corner.l, right: corner.r, zIndex: 6, pointerEvents: "none" }}>
                     <div style={{ width: 30, height: 30, [corner.bt]: `2px solid ${scene.accentColor}`, [corner.bl]: `2px solid ${scene.accentColor}`, opacity: 0.6 }} />

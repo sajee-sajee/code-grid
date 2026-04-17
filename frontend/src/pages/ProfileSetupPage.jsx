@@ -15,10 +15,10 @@ function PickRow({ label, items, sel, onSel }) {
 
     return (
         <div style={{ marginBottom: 20 }}>
-            <div className="MONO" style={{ fontSize: 11, color: "rgba(0,212,255,.5)", marginBottom: 8, letterSpacing: ".15em" }}>{label}</div>
+            <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--cyan-rgb),.5)", marginBottom: 8, letterSpacing: ".15em" }}>{label}</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {items.map((item, i) => (
-                    <div key={i} onClick={() => onSel(i)} style={{ width: 50, height: 50, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", border: sel === i ? "1px solid #00ff41" : "1px solid rgba(255,255,255,.1)", boxShadow: sel === i ? "0 0 10px rgba(0,255,65,.4)" : "none", background: sel === i ? "rgba(0,255,65,.1)" : "rgba(0,8,18,.9)", transition: "all .2s", overflow: "hidden", borderRadius: 4 }}>
+                    <div key={i} onClick={() => onSel(i)} style={{ width: 50, height: 50, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", border: sel === i ? "1px solid var(--green)" : "1px solid rgba(var(--white-rgb),.1)", boxShadow: sel === i ? "0 0 10px rgba(var(--green-rgb),.4)" : "none", background: sel === i ? "rgba(var(--green-rgb),.1)" : "rgba(var(--bg-card-rgb),.9)", transition: "all .2s", overflow: "hidden", borderRadius: 4 }}>
                         <img src={item} alt={`${label} ${i}`} style={{ width: "100%", height: "100%", objectFit: "contain", transformOrigin: origin, transform: transform }} />
                     </div>
                 ))}
@@ -59,10 +59,10 @@ export default function ProfileSetupPage({ onComplete }) {
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
             <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 600 }}>
                 <div className="ORB gG" style={{ fontSize: 24, fontWeight: 700, letterSpacing: ".15em", marginBottom: 4, textAlign: "center" }}>IDENTITY SETUP</div>
-                <div className="MONO" style={{ fontSize: 12, color: "rgba(0,212,255,.4)", textAlign: "center", marginBottom: 32, letterSpacing: ".2em" }}>CONFIGURE YOUR OPERATIVE PROFILE</div>
+                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--cyan-rgb),.4)", textAlign: "center", marginBottom: 32, letterSpacing: ".2em" }}>CONFIGURE YOUR OPERATIVE PROFILE</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
                     <CyberCard style={{ padding: 24 }}>
-                        <div className="MONO" style={{ fontSize: 11, color: "rgba(0,212,255,.5)", marginBottom: 8, letterSpacing: ".15em" }}>CODENAME</div>
+                        <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--cyan-rgb),.5)", marginBottom: 8, letterSpacing: ".15em" }}>CODENAME</div>
                         <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your codename..." />
                         {err && <div className="MONO gR" style={{ fontSize: 11, marginTop: 8 }}>⚠ {err}</div>}
                         <div style={{ marginTop: 16 }}>

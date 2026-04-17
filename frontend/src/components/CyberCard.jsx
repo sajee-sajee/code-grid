@@ -1,4 +1,4 @@
-export default function CyberCard({ children, className = "", style = {}, color = "#00d4ff" }) {
+export default function CyberCard({ children, className = "", style = {}, color = "var(--cyan)" }) {
     return (
         <div
             className={`bg-card clip-all ${className}`}

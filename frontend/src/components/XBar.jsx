@@ -1,4 +1,4 @@
-export default function XBar({ val, max, color = "#00ff41", label = "" }) {
+export default function XBar({ val, max, color = "var(--green)", label = "" }) {
     const pct = Math.min(100, (val / max) * 100);
     return (
         <div>
@@ -8,7 +8,7 @@ export default function XBar({ val, max, color = "#00ff41", label = "" }) {
                     <span style={{ color }}>{val}/{max}</span>
                 </div>
             )}
-            <div style={{ height: 6, background: "rgba(255,255,255,.08)", position: "relative" }}>
+            <div style={{ height: 6, background: "rgba(var(--white-rgb),.08)", position: "relative" }}>
                 <div style={{ width: `${pct}%`, height: "100%", background: `linear-gradient(90deg,${color},${color}88)`, boxShadow: `0 0 8px ${color}`, transition: "width .5s ease" }} />
             </div>
         </div>

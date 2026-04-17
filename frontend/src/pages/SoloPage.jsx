@@ -11,7 +11,7 @@ export default function SoloPage({ user, onNav, onSelectLevel }) {
                     <Btn variant="ghost" size="sm" onClick={() => onNav("dashboard")}>← BACK</Btn>
                     <div className="ORB gG" style={{ fontSize: 22, fontWeight: 700, letterSpacing: ".12em" }}>CYBER CAMPAIGN</div>
                 </div>
-                <div className="MONO" style={{ fontSize: 12, color: "rgba(0,212,255,.4)", marginBottom: 32, letterSpacing: ".15em" }}>
+                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--cyan-rgb),.4)", marginBottom: 32, letterSpacing: ".15em" }}>
                     SELECT DISTRICT · {user.unlockedLevel - 1} OF 11 CLEARED
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 16 }}>
@@ -24,19 +24,19 @@ export default function SoloPage({ user, onNav, onSelectLevel }) {
                             <div key={d.id}
                                 className={`district-card ${unlocked ? "" : "locked"}`}
                                 onClick={() => { if (unlocked) onSelectLevel(d.id); }}
-                                style={{ padding: 20, background: "rgba(0,8,18,.95)", border: `1px solid ${completed ? "#00ff41" : unlocked ? d.color + "55" : "rgba(255,255,255,.06)"}`, boxShadow: completed ? "0 0 16px rgba(0,255,65,.3)" : unlocked ? `0 0 10px ${d.color}20` : "none", clipPath: "polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)", position: "relative" }}>
+                                style={{ padding: 20, background: "rgba(var(--bg-card-rgb),.95)", border: `1px solid ${completed ? "var(--green)" : unlocked ? d.color + "55" : "rgba(var(--white-rgb),.06)"}`, boxShadow: completed ? "0 0 16px rgba(var(--green-rgb),.3)" : unlocked ? `0 0 10px ${d.color}20` : "none", clipPath: "polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)", position: "relative" }}>
                                 {!unlocked && <div style={{ position: "absolute", top: 8, right: 8, fontSize: 14 }}>🔒</div>}
                                 {completed && <div style={{ position: "absolute", top: 8, right: 8, fontSize: 14 }}>✅</div>}
                                 <div style={{ fontSize: 36, marginBottom: 10 }}>
                                     {d.logo ? <img src={d.logo} alt={d.name} style={{ width: 44, height: 44, objectFit: "contain", filter: unlocked ? `drop-shadow(0 0 6px ${d.color}aa)` : "grayscale(100%)" }} /> : d.icon}
                                 </div>
-                                <div className="ORB" style={{ fontSize: 11, color: unlocked ? d.color : "rgba(160,180,200,.3)", fontWeight: 700, letterSpacing: ".08em", marginBottom: 4 }}>LVL {d.id}</div>
-                                <div className="ORB" style={{ fontSize: 13, color: unlocked ? "#e0e8f0" : "rgba(160,180,200,.3)", marginBottom: 4 }}>{d.name}</div>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(160,180,200,.4)", marginBottom: 10 }}>{d.topic}</div>
-                                <div style={{ height: 4, background: "rgba(255,255,255,.06)" }}>
+                                <div className="ORB" style={{ fontSize: 11, color: unlocked ? d.color : "rgba(var(--text-muted-rgb),.3)", fontWeight: 700, letterSpacing: ".08em", marginBottom: 4 }}>LVL {d.id}</div>
+                                <div className="ORB" style={{ fontSize: 13, color: unlocked ? "#e0e8f0" : "rgba(var(--text-muted-rgb),.3)", marginBottom: 4 }}>{d.name}</div>
+                                <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.4)", marginBottom: 10 }}>{d.topic}</div>
+                                <div style={{ height: 4, background: "rgba(var(--white-rgb),.06)" }}>
                                     <div style={{ width: `${total ? (done / total) * 100 : 0}%`, height: "100%", background: d.color, transition: "width .6s" }} />
                                 </div>
-                                <div className="MONO" style={{ fontSize: 10, color: "rgba(160,180,200,.4)", marginTop: 4 }}>{done}/{total} missions</div>
+                                <div className="MONO" style={{ fontSize: 10, color: "rgba(var(--text-muted-rgb),.4)", marginTop: 4 }}>{done}/{total} missions</div>
                             </div>
                         );
                     })}

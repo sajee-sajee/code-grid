@@ -17,8 +17,8 @@ export const SCENES = {
     objectFit: "stretch",    // This is the "secret sauce" to force stretching
     display: "block"         // Removes any bottom whitespace/gaps
 },
-        accentColor: "#00d4ff",
-        glowColor: "rgba(0,212,255,0.3)",
+        accentColor: "var(--cyan)",
+        glowColor: "rgba(var(--cyan-rgb),0.3)",
         particles: ["⬡", "◈", "◉", "▣", "◫"],
         lines: [
             "A vast cyberpunk megacity looms in deep navy dusk.",
@@ -35,8 +35,8 @@ export const SCENES = {
         bgAnim: "sceneBgZoomIn 7s ease-in-out forwards",
         fgImage: "/scenes/FgScene02.png",
         fgAnim: "sceneFgFloat 3.5s ease-in-out infinite",
-        accentColor: "#00ff41",
-        glowColor: "rgba(0,255,65,0.3)",
+        accentColor: "var(--green)",
+        glowColor: "rgba(var(--green-rgb),0.3)",
         particles: ["[0]", "[1]", "[2]", "[3]", "[4]", "[n]"],
         lines: [
             "Welcome to the brutalist Training Arena.",
@@ -56,8 +56,8 @@ export const SCENES = {
         bgImage: "/scenes/BgScene03.png",
         fgEmoji: "🔤",
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
-        accentColor: "#00d4ff",
-        glowColor: "rgba(0,212,255,0.3)",
+        accentColor: "var(--cyan)",
+        glowColor: "rgba(var(--cyan-rgb),0.3)",
         particles: ["str", "abc", "XOR", "#%@", "</>", "==="],
         lines: [
             "You enter a narrow night market alley thick with neon smog.",
@@ -80,8 +80,8 @@ export const SCENES = {
         bgAnim: "sceneBgZoomIn 7s ease-in-out forwards",
         fgEmoji: "🔁",
         fgAnim: "sceneFgFloat 3s ease-in-out infinite",
-        accentColor: "#bf00ff",
-        glowColor: "rgba(191,0,255,0.3)",
+        accentColor: "var(--purple)",
+        glowColor: "rgba(var(--purple-rgb),0.3)",
         particles: ["f(n)", "f(n-1)", "f(n-2)", "∞", "↺", "..."],
         lines: [
             "An impossible laboratory shifting with vertiginous depth.",
@@ -98,8 +98,8 @@ export const SCENES = {
         bgAnim: "sceneBgPanUp 7s ease-in-out infinite alternate",
         fgEmoji: "🔑",
         fgAnim: "sceneFgDriftH 4s ease-in-out infinite",
-        accentColor: "#ffcc00",
-        glowColor: "rgba(255,204,0,0.3)",
+        accentColor: "var(--yellow)",
+        glowColor: "rgba(var(--yellow-rgb),0.3)",
         particles: ["key", "hash", "{}", "O(1)", "map", "set"],
         lines: [
             "Infinite data pillars stretch into an amber-lit abyss.",

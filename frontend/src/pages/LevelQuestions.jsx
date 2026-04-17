@@ -67,7 +67,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
             <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 500 }}>
                 <div className="aLevelUp" style={{ fontSize: 80, marginBottom: 24 }}>🏆</div>
                 <div className="ORB gG" style={{ fontSize: 28, fontWeight: 700, letterSpacing: ".12em", marginBottom: 8 }}>DISTRICT CLEARED</div>
-                <div className="MONO" style={{ fontSize: 14, color: "rgba(0,212,255,.6)", marginBottom: 32 }}>{district.name.toUpperCase()} LIBERATED</div>
+                <div className="MONO" style={{ fontSize: 14, color: "rgba(var(--cyan-rgb),.6)", marginBottom: 32 }}>{district.name.toUpperCase()} LIBERATED</div>
                 <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
                     {levelId < 11 && <Btn variant="g" onClick={() => onNav("solo")}>▶ NEXT DISTRICT</Btn>}
                     <Btn variant="ghost" onClick={() => onNav("dashboard")}>DASHBOARD</Btn>
@@ -121,7 +121,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                         {questions.map((qq, i) => (
                             <div key={i} onClick={() => handleQSwitch(i)}
-                                style={{ width: 36, height: 36, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: solvedInLevel.includes(qq.id) ? "rgba(0,255,65,.2)" : qIdx === i ? "rgba(0,212,255,.15)" : "rgba(0,8,18,.9)", border: solvedInLevel.includes(qq.id) ? "1px solid #00ff41" : qIdx === i ? `1px solid ${district.color}` : "1px solid rgba(255,255,255,.1)", color: solvedInLevel.includes(qq.id) ? "#00ff41" : qIdx === i ? district.color : "rgba(160,180,200,.5)", fontFamily: "Orbitron,monospace", fontSize: 12, fontWeight: 700, transition: "all .2s" }}>
+                                style={{ width: 36, height: 36, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: solvedInLevel.includes(qq.id) ? "rgba(var(--green-rgb),.2)" : qIdx === i ? "rgba(var(--cyan-rgb),.15)" : "rgba(var(--bg-card-rgb),.9)", border: solvedInLevel.includes(qq.id) ? "1px solid var(--green)" : qIdx === i ? `1px solid ${district.color}` : "1px solid rgba(var(--white-rgb),.1)", color: solvedInLevel.includes(qq.id) ? "var(--green)" : qIdx === i ? district.color : "rgba(var(--text-muted-rgb),.5)", fontFamily: "Orbitron,monospace", fontSize: 12, fontWeight: 700, transition: "all .2s" }}>
                                 {solvedInLevel.includes(qq.id) ? "✓" : i + 1}
                             </div>
                         ))}
@@ -136,13 +136,13 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                                 <span className={`badge-${q.diff === "Easy" ? "e" : q.diff === "Medium" ? "m" : "h"}`}>{q.diff}</span>
                                 <div className="MONO" style={{ marginLeft: "auto", fontSize: 11, color: district.color }}>+{q.xp} XP</div>
                             </div>
-                            <div className="MONO" style={{ fontSize: 13, color: "rgba(180,200,220,.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 16 }}>{q.desc}</div>
+                            <div className="MONO" style={{ fontSize: 13, color: "rgba(var(--text-muted-rgb),.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 16 }}>{q.desc}</div>
                             {q.examples.map((ex, i) => (
-                                <div key={i} style={{ background: "rgba(0,15,30,.6)", border: "1px solid rgba(0,212,255,.15)", padding: 12, marginBottom: 8 }}>
-                                    <div className="MONO" style={{ fontSize: 11, color: "rgba(0,212,255,.5)", marginBottom: 4 }}>EXAMPLE {i + 1}</div>
-                                    <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Input: <span style={{ color: "#00d4ff" }}>{ex.i}</span></div>
-                                    <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Output: <span style={{ color: "#00ff41" }}>{ex.o}</span></div>
-                                    {ex.e && <div className="MONO" style={{ fontSize: 11, color: "rgba(160,180,200,.4)" }}>Explanation: {ex.e}</div>}
+                                <div key={i} style={{ background: "rgba(var(--bg-panel-rgb),.6)", border: "1px solid rgba(var(--cyan-rgb),.15)", padding: 12, marginBottom: 8 }}>
+                                    <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--cyan-rgb),.5)", marginBottom: 4 }}>EXAMPLE {i + 1}</div>
+                                    <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>Input: <span style={{ color: "var(--cyan)" }}>{ex.i}</span></div>
+                                    <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>Output: <span style={{ color: "var(--green)" }}>{ex.o}</span></div>
+                                    {ex.e && <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.4)" }}>Explanation: {ex.e}</div>}
                                 </div>
                             ))}
                             <div style={{ marginTop: 12 }}>
@@ -152,7 +152,7 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                                     ))}
                                 </div>
                                 {hintIdx >= 0 && (
-                                    <div className="MONO bgP" style={{ border: "1px solid rgba(191,0,255,.3)", padding: 12, marginTop: 8, fontSize: 13, color: "#e0c0ff", lineHeight: 1.7 }}>
+                                    <div className="MONO bgP" style={{ border: "1px solid rgba(var(--purple-rgb),.3)", padding: 12, marginTop: 8, fontSize: 13, color: "#e0c0ff", lineHeight: 1.7 }}>
                                         {q.hints[hintIdx]}
                                     </div>
                                 )}
@@ -162,13 +162,13 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                     {/* Code panel */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                         <CyberCard style={{ padding: 0, overflow: "hidden" }}>
-                            <div style={{ padding: "10px 16px", background: "rgba(0,255,65,.05)", borderBottom: "1px solid rgba(0,255,65,.2)", display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ padding: "10px 16px", background: "rgba(var(--green-rgb),.05)", borderBottom: "1px solid rgba(var(--green-rgb),.2)", display: "flex", alignItems: "center", gap: 8 }}>
                                 <div style={{ display: "flex", gap: 6 }}>
-                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} />
-                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} />
-                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--red)" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--yellow)" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--green)" }} />
                                 </div>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(0,255,65,.5)", letterSpacing: ".15em" }}>MISSION_{q.id.toUpperCase()}.{getFileExtension(language)}</div>
+                                <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--green-rgb),.5)", letterSpacing: ".15em" }}>MISSION_{q.id.toUpperCase()}.{getFileExtension(language)}</div>
                                 <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
                                     <LanguagePicker value={language} onChange={handleLanguageChange} />
                                     {alreadySolved && <span className="MONO gG" style={{ fontSize: 11 }}>✓ SOLVED</span>}
@@ -185,19 +185,19 @@ export default function LevelQuestions({ levelId, onNav, onLevelComplete }) {
                         </div>
                         {syncError && <div className="MONO gR" style={{ fontSize: 11 }}>{syncError}</div>}
                         {results && (
-                            <CyberCard style={{ padding: 16 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>
-                                <div className="ORB" style={{ fontSize: 12, letterSpacing: ".12em", marginBottom: 12, color: results.every((r) => r.passed) ? "#00ff41" : "#ff0033" }}>
+                            <CyberCard style={{ padding: 16 }} color={results.every((r) => r.passed) ? "var(--green)" : "var(--red)"}>
+                                <div className="ORB" style={{ fontSize: 12, letterSpacing: ".12em", marginBottom: 12, color: results.every((r) => r.passed) ? "var(--green)" : "var(--red)" }}>
                                     {results.every((r) => r.passed) ? "✓ ALL TESTS PASSED" : `✗ ${results.filter((r) => !r.passed).length} TESTS FAILED`}
                                 </div>
                                 {results.map((r, i) => (
-                                    <div key={i} style={{ marginBottom: 8, padding: 10, background: "rgba(0,8,18,.8)", border: `1px solid ${r.passed ? "rgba(0,255,65,.3)" : "rgba(255,0,51,.3)"}` }}>
+                                    <div key={i} style={{ marginBottom: 8, padding: 10, background: "rgba(var(--bg-card-rgb),.8)", border: `1px solid ${r.passed ? "rgba(var(--green-rgb),.3)" : "rgba(var(--red-rgb),.3)"}` }}>
                                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                                            <span className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>{r.label}</span>
+                                            <span className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>{r.label}</span>
                                             <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 12 }}>{r.passed ? "✓ PASS" : "✗ FAIL"}</span>
                                         </div>
                                         {!r.passed && (
-                                            <div className="MONO" style={{ fontSize: 11, color: "rgba(160,180,200,.5)" }}>
-                                                {r.error ? <span className="gR">Error: {r.error}</span> : <>Expected: <span style={{ color: "#00ff41" }}>{r.expected}</span> · Got: <span style={{ color: "#ff0033" }}>{r.output}</span></>}
+                                            <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.5)" }}>
+                                                {r.error ? <span className="gR">Error: {r.error}</span> : <>Expected: <span style={{ color: "var(--green)" }}>{r.expected}</span> · Got: <span style={{ color: "var(--red)" }}>{r.output}</span></>}
                                             </div>
                                         )}
                                     </div>

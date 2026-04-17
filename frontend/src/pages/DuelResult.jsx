@@ -6,7 +6,7 @@ import { getDuelOutcome } from "../utils/duelOutcome";
 export default function DuelResult({ result, onNav }) {
     const { user } = useUser();
     const { won, isTie } = getDuelOutcome(result);
-    const accentColor = isTie ? "#ffcc00" : won ? "#00ff41" : "#ff0033";
+    const accentColor = isTie ? "var(--yellow)" : won ? "var(--green)" : "var(--red)";
     const icon = isTie ? "⚖️" : won ? "🏆" : "💀";
     const headline = isTie ? "DRAW" : won ? "VICTORY" : "DEFEATED";
     const subhead = isTie ? "SCORES LOCKED. NO WINNER THIS ROUND" : won ? "YOU OUTCODE THE MACHINE" : "NEXUS-7 WINS THIS ROUND";
@@ -20,17 +20,17 @@ export default function DuelResult({ result, onNav }) {
                     <div className={`ORB ${isTie ? "gY" : won ? "gG" : "gR"}`} style={{ fontSize: 32, fontWeight: 700, letterSpacing: ".15em", marginBottom: 8 }}>
                         {headline}
                     </div>
-                    <div className="MONO" style={{ fontSize: 13, color: "rgba(160,180,200,.6)", marginBottom: 32, letterSpacing: ".15em" }}>
+                    <div className="MONO" style={{ fontSize: 13, color: "rgba(var(--text-muted-rgb),.6)", marginBottom: 32, letterSpacing: ".15em" }}>
                         {subhead}
                     </div>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
-                        <div style={{ padding: 16, background: "rgba(0,255,65,.08)", border: "1px solid rgba(0,255,65,.3)" }}>
+                        <div style={{ padding: 16, background: "rgba(var(--green-rgb),.08)", border: "1px solid rgba(var(--green-rgb),.3)" }}>
                             <div className="ORB gG" style={{ fontSize: 28, fontWeight: 700 }}>{result.playerScore}</div>
-                            <div className="MONO" style={{ fontSize: 11, color: "rgba(0,255,65,.5)", letterSpacing: ".15em" }}>{user.username}</div>
+                            <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--green-rgb),.5)", letterSpacing: ".15em" }}>{user.username}</div>
                         </div>
-                        <div style={{ padding: 16, background: "rgba(255,0,51,.08)", border: "1px solid rgba(255,0,51,.3)" }}>
+                        <div style={{ padding: 16, background: "rgba(var(--red-rgb),.08)", border: "1px solid rgba(var(--red-rgb),.3)" }}>
                             <div className="ORB gR" style={{ fontSize: 28, fontWeight: 700 }}>{result.cpuScore}</div>
-                            <div className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", letterSpacing: ".15em" }}>NEXUS-7</div>
+                            <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--red-rgb),.5)", letterSpacing: ".15em" }}>NEXUS-7</div>
                         </div>
                     </div>
                     {won && <div className="MONO gY" style={{ fontSize: 12, marginBottom: 24 }}>+50 XP DUEL BONUS · +1 WIN RECORDED</div>}

@@ -21,9 +21,9 @@ const solvedSchema = new mongoose.Schema({
 }, { _id: false });
 
 const avatarSchema = new mongoose.Schema({
-    face: { type: String, default: "🤖" },
-    outfit: { type: String, default: "🥋" },
-    acc: { type: String, default: "⚡" },
+    head: { type: String, default: "/avatars/head1.png" },
+    body: { type: String, default: "/avatars/body1.png" },
+    foot: { type: String, default: "/avatars/foot1.png" },
 }, { _id: false });
 
 const userSchema = new mongoose.Schema({
