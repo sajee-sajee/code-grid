@@ -165,7 +165,7 @@ export const QUESTIONS = {
             examples: [{ i: 's="hello"', o: '"olleh"' }, { i: 's="Cyberpunk"', o: '"knuprepyC"' }],
             hints: ["Push all characters onto a stack", "Pop them one by one to build the result", "Stack is LIFO — last in, first out"],
             start: "function solve(s) {\n  // Return reversed string using a stack\n  \n}",
-            tests: [{ l: "Hello", r: (f) => f("hello"), e: "olleh" }, { l: "Word", r: (f) => f("Cyberpunk"), e: "knuprepyC" }, { l: "Single char", r: (f) => f("a"), e: "a" }, { l: "Palindrome", r: (f) => f("racecar"), e: "racecar" }],
+            tests: [{ l: "Hello", r: (f) => f("hello"), e: "olleh" }, { l: "Word", r: (f) => f("Cyberpunk"), e: "knuprebyC" }, { l: "Single char", r: (f) => f("a"), e: "a" }, { l: "Palindrome", r: (f) => f("racecar"), e: "racecar" }],
         },
         {
             id: "5c", title: "Daily Temperatures", diff: "Medium", xp: 170,
