@@ -9,31 +9,80 @@ export default function DuelSetupPage({ onNav, onStartDuel }) {
     const topics = DISTRICTS.map((d) => d.topic);
 
     return (
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, position: "relative" }}>
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
-            <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 500 }}>
-                <CyberCard style={{ padding: 36 }} color="#ff0033">
-                    <div className="ORB gR" style={{ fontSize: 22, fontWeight: 700, letterSpacing: ".15em", marginBottom: 4, textAlign: "center" }}>⚔️ DUEL ARENA</div>
-                    <div className="MONO" style={{ fontSize: 12, color: "rgba(255,0,51,.4)", textAlign: "center", marginBottom: 32, letterSpacing: ".2em" }}>CONFIGURE YOUR BATTLE PARAMETERS</div>
-                    <div style={{ marginBottom: 20 }}>
-                        <div className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", marginBottom: 8, letterSpacing: ".15em" }}>DSA TOPIC</div>
+            
+            {/* Ambient glows */}
+            <div style={{ position: "absolute", width: 450, height: 450, background: "radial-gradient(circle, rgba(255, 45, 85, 0.05) 0%, transparent 70%)", zIndex: 1, pointerEvents: "none" }} />
+            
+            <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 520, animation: "fadeIn 0.4s ease" }}>
+                <CyberCard style={{ padding: 40 }} color="var(--color-red)">
+                    <div style={{ textAlign: "center", marginBottom: 32 }}>
+                        <div className="aFloat" style={{ fontSize: 48, marginBottom: 12, filter: "drop-shadow(0 0 10px var(--color-red))" }}>⚔️</div>
+                        <h2 className="ORB gR" style={{ fontSize: 22, fontWeight: 700, letterSpacing: "0.15em", marginBottom: 6 }}>
+                            DUEL ARENA
+                        </h2>
+                        <div className="MONO" style={{ fontSize: 11, color: "var(--color-text-muted)", letterSpacing: "0.2em" }}>
+                            CONFIGURE SIMULATED BREACH TARGET PARAMETERS
+                        </div>
+                    </div>
+                    
+                    <div style={{ marginBottom: 24 }}>
+                        <label className="MONO" style={{ display: "block", fontSize: 11, color: "var(--color-text-secondary)", marginBottom: 10, letterSpacing: "0.15em", fontWeight: 600 }}>
+                            TARGET ALGORITHM SUB-MODULE
+                        </label>
                         <select value={topic} onChange={(e) => setTopic(e.target.value)} style={{ width: "100%" }}>
                             {topics.map((t) => <option key={t} value={t}>{t}</option>)}
                         </select>
                     </div>
-                    <div style={{ marginBottom: 32 }}>
-                        <div className="MONO" style={{ fontSize: 11, color: "rgba(255,0,51,.5)", marginBottom: 8, letterSpacing: ".15em" }}>DIFFICULTY</div>
-                        <div style={{ display: "flex", gap: 8 }}>
-                            {["Easy", "Medium", "Hard"].map((d) => (
-                                <div key={d} onClick={() => setDiff(d)} style={{ flex: 1, padding: "10px 0", textAlign: "center", cursor: "pointer", background: diff === d ? (d === "Easy" ? "rgba(0,255,65,.15)" : d === "Medium" ? "rgba(255,200,0,.15)" : "rgba(255,0,51,.15)") : "rgba(0,8,18,.8)", border: diff === d ? `1px solid ${d === "Easy" ? "#00ff41" : d === "Medium" ? "#ffcc00" : "#ff0033"}` : "1px solid rgba(255,255,255,.1)", fontFamily: "Orbitron,monospace", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", color: diff === d ? (d === "Easy" ? "#00ff41" : d === "Medium" ? "#ffcc00" : "#ff0033") : "rgba(160,180,200,.5)", transition: "all .2s" }}>
-                                    {d.toUpperCase()}
-                                </div>
-                            ))}
+                    
+                    <div style={{ marginBottom: 36 }}>
+                        <label className="MONO" style={{ display: "block", fontSize: 11, color: "var(--color-text-secondary)", marginBottom: 10, letterSpacing: "0.15em", fontWeight: 600 }}>
+                            AI DIALECTIC RESISTANCE LEVEL (DIFFICULTY)
+                        </label>
+                        <div style={{ display: "flex", gap: 10 }}>
+                            {[
+                                { name: "Easy", color: "var(--color-green)", bg: "rgba(0, 255, 157, 0.1)" },
+                                { name: "Medium", color: "var(--color-yellow)", bg: "rgba(250, 204, 21, 0.1)" },
+                                { name: "Hard", color: "var(--color-red)", bg: "rgba(255, 45, 85, 0.1)" }
+                            ].map((d) => {
+                                const active = diff === d.name;
+                                return (
+                                    <div 
+                                        key={d.name} 
+                                        onClick={() => setDiff(d.name)} 
+                                        style={{ 
+                                            flex: 1, 
+                                            padding: "12px 0", 
+                                            textAlign: "center", 
+                                            cursor: "pointer", 
+                                            background: active ? d.bg : "rgba(10, 13, 28, 0.6)", 
+                                            border: active ? `1px solid ${d.color}` : "1px solid rgba(255,255,255,0.08)", 
+                                            borderRadius: 4,
+                                            fontFamily: "var(--font-title)", 
+                                            fontSize: 11, 
+                                            fontWeight: 700, 
+                                            letterSpacing: "0.08em", 
+                                            color: active ? d.color : "var(--color-text-secondary)", 
+                                            transition: "all 0.25s",
+                                            boxShadow: active ? `0 0 10px ${d.color}44` : "none",
+                                            transform: active ? "scale(1.03)" : "none"
+                                        }}
+                                    >
+                                        {d.name.toUpperCase()}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
-                    <div style={{ display: "flex", gap: 12 }}>
-                        <Btn variant="ghost" onClick={() => onNav("dashboard")} style={{ flex: 1, justifyContent: "center" }}>← BACK</Btn>
-                        <Btn variant="r" onClick={() => onStartDuel({ topic, diff })} style={{ flex: 2, justifyContent: "center" }}>⚔️ ENTER ARENA</Btn>
+                    
+                    <div style={{ display: "flex", gap: 16 }}>
+                        <Btn variant="ghost" onClick={() => onNav("dashboard")} style={{ flex: 1, justifyContent: "center", borderRadius: 4 }}>
+                            ← DISCONNECT
+                        </Btn>
+                        <Btn variant="r" onClick={() => onStartDuel({ topic, diff })} style={{ flex: 2, justifyContent: "center" }}>
+                            ⚔️ CONNECT UPLINK
+                        </Btn>
                     </div>
                 </CyberCard>
             </div>

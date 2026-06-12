@@ -75,6 +75,37 @@ export default function CinematicScene({ sceneId, onSkip }) {
         return () => cancelAnimationFrame(raf);
     }, [sceneId]);
 
+    const renderContent = (val, isBg) => {
+        const isImg = typeof val === "string" && (val.endsWith(".png") || val.includes("/assests/"));
+        if (isImg) {
+            return (
+                <img 
+                    src={val} 
+                    style={{ 
+                        width: isBg ? "min(80vw, 80vh)" : "min(40vw, 40vh)", 
+                        height: isBg ? "min(80vw, 80vh)" : "min(40vw, 40vh)", 
+                        objectFit: "contain",
+                        opacity: isBg ? 0.08 : 0.28, 
+                        animation: isBg ? scene.bgAnim : scene.fgAnim, 
+                        filter: isBg ? `blur(2px) drop-shadow(0 0 80px ${scene.accentColor})` : `drop-shadow(0 0 40px ${scene.accentColor})` 
+                    }} 
+                    alt="" 
+                />
+            );
+        }
+        return (
+            <div style={{ 
+                fontSize: isBg ? "min(40vw, 40vh)" : "min(20vw, 22vh)", 
+                opacity: isBg ? 0.06 : 0.22, 
+                animation: isBg ? scene.bgAnim : scene.fgAnim, 
+                filter: isBg ? `blur(2px) drop-shadow(0 0 80px ${scene.accentColor})` : `drop-shadow(0 0 40px ${scene.accentColor})`,
+                transformOrigin: "center center" 
+            }}>
+                {val}
+            </div>
+        );
+    };
+
     return (
         <div
             onClick={onSkip}
@@ -84,9 +115,7 @@ export default function CinematicScene({ sceneId, onSkip }) {
             <div style={{ position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none", background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.85) 100%)", animation: "vignettePulse 4s ease-in-out infinite" }} />
             <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", backgroundImage: `linear-gradient(${scene.accentColor}08 1px, transparent 1px), linear-gradient(90deg, ${scene.accentColor}08 1px, transparent 1px)`, backgroundSize: "60px 60px", animation: "gridShimmer 4s ease-in-out infinite" }} />
             <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                <div style={{ fontSize: "min(40vw, 40vh)", opacity: 0.06, animation: scene.bgAnim, filter: `blur(2px) drop-shadow(0 0 80px ${scene.accentColor})`, transformOrigin: "center center" }}>
-                    {scene.bgEmoji}
-                </div>
+                {renderContent(scene.bgEmoji, true)}
             </div>
             {particles.map((p) => (
                 <div key={p.id} style={{ position: "absolute", left: `${p.x}%`, top: `${p.y}%`, fontSize: p.size, opacity: p.opacity, color: scene.accentColor, fontFamily: "'Share Tech Mono', monospace", fontWeight: 700, animation: `sceneFgFloat ${p.dur}s ease-in-out ${p.delay}s infinite`, textShadow: `0 0 12px ${scene.accentColor}`, pointerEvents: "none", zIndex: 4 }}>
@@ -94,9 +123,7 @@ export default function CinematicScene({ sceneId, onSkip }) {
                 </div>
             ))}
             <div style={{ position: "absolute", inset: 0, zIndex: 5, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                <div style={{ fontSize: "min(20vw, 22vh)", opacity: 0.22, animation: scene.fgAnim, filter: `drop-shadow(0 0 40px ${scene.accentColor})` }}>
-                    {scene.fgEmoji}
-                </div>
+                {renderContent(scene.fgEmoji, false)}
             </div>
             <div style={{ position: "absolute", top: 40, left: 0, right: 0, zIndex: 10, textAlign: "center", pointerEvents: "none", animation: "subtitleReveal .8s ease both" }}>
                 <div style={{ fontFamily: "'Orbitron', monospace", fontSize: "clamp(11px,1.8vw,16px)", fontWeight: 700, letterSpacing: ".35em", color: scene.accentColor, textShadow: `0 0 20px ${scene.accentColor}, 0 0 40px ${scene.accentColor}66`, textTransform: "uppercase" }}>◈ {scene.title} ◈</div>

@@ -34,68 +34,181 @@ export default function DailyQuestPage({ onNav }) {
     };
 
     return (
-        <div style={{ minHeight: "100vh", padding: 24, maxWidth: 900, margin: "0 auto" }}>
+        <div style={{ minHeight: "100vh", padding: 20, maxWidth: 1250, margin: "0 auto", position: "relative" }}>
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
+            
             <div style={{ position: "relative", zIndex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+                
+                {/* Header Section */}
+                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, flexWrap: "wrap" }}>
                     <Btn variant="ghost" size="sm" onClick={() => onNav("dashboard")}>← BACK</Btn>
-                    <div className="ORB gY" style={{ fontSize: 20, fontWeight: 700, letterSpacing: ".12em" }}>📅 DAILY QUEST</div>
-                    {done && <span className="MONO gG" style={{ fontSize: 12 }}>✓ COMPLETED TODAY</span>}
+                    <div>
+                        <h2 className="ORB gY" style={{ fontSize: 20, fontWeight: 700, letterSpacing: "0.15em", textShadow: "0 0 12px var(--color-yellow-glow)" }}>
+                            📅 DAILY BREAKOUT
+                        </h2>
+                        <div className="MONO" style={{ fontSize: 11, color: "var(--color-text-muted)", letterSpacing: "0.1em", marginTop: 4 }}>
+                            24HR SECTOR ATTACK CONTEXT ROUTING
+                        </div>
+                    </div>
+                    {done && (
+                        <span className="MONO gG" style={{ 
+                            fontSize: 11, 
+                            fontWeight: 700, 
+                            background: "rgba(0, 255, 157, 0.12)", 
+                            border: "1px solid var(--border-green)", 
+                            padding: "4px 12px", 
+                            borderRadius: 4, 
+                            marginLeft: 8 
+                        }}>
+                            ✓ STREAK SECURED FOR TODAY
+                        </span>
+                    )}
                 </div>
-                <div style={{ display: "flex", gap: 20, marginBottom: 24, flexWrap: "wrap" }}>
-                    <CyberCard style={{ padding: 20, flex: 1 }} color="#ffcc00">
+
+                {/* Streak Metrics Cards */}
+                <div style={{ display: "flex", gap: 20, marginBottom: 28, flexWrap: "wrap" }}>
+                    <CyberCard style={{ padding: 24, flex: "1 1 200px" }} color="var(--color-yellow)">
                         <div style={{ textAlign: "center" }}>
-                            <div className="ORB" style={{ fontSize: 40, color: "#ff6600", textShadow: "0 0 20px #ff6600" }}>{user.streak}🔥</div>
-                            <div className="MONO" style={{ fontSize: 12, color: "rgba(255,200,0,.6)", letterSpacing: ".2em" }}>DAY STREAK</div>
+                            <div className="ORB" style={{ fontSize: 44, color: "var(--color-yellow)", textShadow: "0 0 20px var(--color-yellow-glow)", fontWeight: 900 }}>
+                                {user.streak}🔥
+                            </div>
+                            <div className="MONO" style={{ fontSize: 11, color: "var(--color-text-muted)", letterSpacing: "0.15em", marginTop: 4 }}>
+                                OPERATIVE SOLVE STREAK
+                            </div>
                         </div>
                     </CyberCard>
-                    <CyberCard style={{ padding: 20, flex: 3 }} color="#ffcc00">
-                        <div className="ORB gY" style={{ fontSize: 14, letterSpacing: ".12em", marginBottom: 8 }}>STREAK CALENDAR</div>
-                        <div style={{ display: "flex", gap: 6 }}>
+                    
+                    <CyberCard style={{ padding: 24, flex: "3 3 500px" }} color="var(--color-yellow)">
+                        <div className="ORB gY" style={{ fontSize: 11, letterSpacing: "0.12em", marginBottom: 12, fontWeight: 700 }}>
+                            14-DAY ATTACK RECORD MATRIX
+                        </div>
+                        <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
                             {Array.from({ length: 14 }).map((_, i) => {
                                 const active = i >= 14 - user.streak;
-                                return <div key={i} style={{ flex: 1, height: 28, background: active ? "rgba(255,180,0,.3)" : "rgba(255,255,255,.05)", border: `1px solid ${active ? "rgba(255,180,0,.5)" : "rgba(255,255,255,.08)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>{active ? "🔥" : ""}</div>;
+                                return (
+                                    <div 
+                                        key={i} 
+                                        style={{ 
+                                            flex: 1, 
+                                            minWidth: 32,
+                                            height: 36, 
+                                            background: active ? "rgba(250, 204, 21, 0.15)" : "rgba(10, 13, 28, 0.6)", 
+                                            border: `1px solid ${active ? "var(--color-yellow)" : "rgba(255,255,255,0.06)"}`, 
+                                            borderRadius: 4,
+                                            display: "flex", 
+                                            alignItems: "center", 
+                                            justifyContent: "center", 
+                                            fontSize: 16,
+                                            boxShadow: active ? "0 0 10px rgba(250, 204, 21, 0.2)" : "none",
+                                            transition: "all 0.25s"
+                                        }}
+                                    >
+                                        {active ? "🔥" : ""}
+                                    </div>
+                                );
                             })}
                         </div>
                     </CyberCard>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <CyberCard style={{ padding: 24 }} color="#ffcc00">
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                            <div className="ORB" style={{ fontSize: 17, color: "#e0e8f0" }}>{q.title}</div>
-                            <span className="badge-e">{q.diff}</span>
-                            <span className="MONO gY" style={{ marginLeft: "auto", fontSize: 11 }}>+{q.xp + 20} XP</span>
-                        </div>
-                        <div className="MONO" style={{ fontSize: 13, color: "rgba(180,200,220,.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 16 }}>{q.desc}</div>
-                        {q.examples.map((ex, i) => (
-                            <div key={i} style={{ background: "rgba(0,15,30,.6)", border: "1px solid rgba(255,200,0,.15)", padding: 12, marginBottom: 8 }}>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)" }}>Example {i + 1}</div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Input: <span style={{ color: "#ffcc00" }}>{ex.i}</span></div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.7)" }}>Output: <span style={{ color: "#00ff41" }}>{ex.o}</span></div>
+
+                {/* Main Splitscreen Layout */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: 20 }}>
+                    
+                    {/* Left: Quest brief */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <CyberCard style={{ padding: 24 }} color="var(--color-yellow)">
+                            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                                <h3 className="ORB" style={{ fontSize: 17, color: "var(--color-text-primary)" }}>{q.title}</h3>
+                                <span className="badge-e">{q.diff}</span>
+                                <span className="MONO gY" style={{ marginLeft: "auto", fontSize: 11, fontWeight: 600 }}>
+                                    +{q.xp + 20} XP TOTAL
+                                </span>
                             </div>
-                        ))}
-                        <Btn variant="ghost" size="sm" onClick={() => setHintShown((s) => !s)} style={{ marginTop: 8 }}>💡 Hint</Btn>
-                        {hintShown && q.hints.map((h, i) => <div key={i} className="MONO bgP" style={{ border: "1px solid rgba(191,0,255,.3)", padding: 10, marginTop: 6, fontSize: 12, color: "#e0c0ff" }}>{h}</div>)}
-                    </CyberCard>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                        <CyberCard style={{ padding: 0, overflow: "hidden" }}>
-                            <div style={{ padding: "10px 16px", background: "rgba(255,200,0,.05)", borderBottom: "1px solid rgba(255,200,0,.2)", display: "flex", gap: 8 }}>
-                                <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff0033" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#ffcc00" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "#00ff41" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255,200,0,.5)", letterSpacing: ".15em" }}>DAILY_{new Date().toISOString().slice(0, 10)}.js</span>
-                            </div>
-                            <CodeEditor value={code} onChange={setCode} height={260} />
-                        </CyberCard>
-                        <Btn variant={done ? "ghost" : "g"} onClick={run} disabled={running || done} style={{ justifyContent: "center" }}>
-                            {done ? "✓ QUEST COMPLETED" : running ? "⏳ RUNNING..." : "▶ SUBMIT SOLUTION"}
-                        </Btn>
-                        {results && (
-                            <CyberCard style={{ padding: 14 }} color={results.every((r) => r.passed) ? "#00ff41" : "#ff0033"}>
-                                {results.map((r, i) => (
-                                    <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-                                        <span className="MONO" style={{ fontSize: 12, color: "rgba(180,200,220,.6)" }}>{r.label}</span>
-                                        <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 12 }}>{r.passed ? "✓ PASS" : r.error ? `✗ ${r.error.slice(0, 30)}` : `✗ Got ${r.output}`}</span>
+                            
+                            <p className="MONO" style={{ 
+                                fontSize: 13, 
+                                color: "var(--color-text-secondary)", 
+                                lineHeight: 1.7, 
+                                whiteSpace: "pre-line", 
+                                marginBottom: 20,
+                                paddingBottom: 16,
+                                borderBottom: "1px dashed rgba(255,255,255,0.06)"
+                            }}>
+                                {q.desc}
+                            </p>
+                            
+                            {/* Examples */}
+                            {q.examples.map((ex, i) => (
+                                <div key={i} style={{ 
+                                    background: "rgba(10, 13, 28, 0.4)", 
+                                    border: "1px solid rgba(250, 204, 21, 0.1)", 
+                                    padding: 14, 
+                                    marginBottom: 10,
+                                    borderRadius: 4
+                                }}>
+                                    <div className="MONO" style={{ fontSize: 10, color: "var(--color-yellow)", marginBottom: 6, fontWeight: 600 }}>EXAMPLE_0{i + 1}</div>
+                                    <div className="MONO" style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>Input: <span style={{ color: "var(--color-yellow)" }}>{ex.i}</span></div>
+                                    <div className="MONO" style={{ fontSize: 12, color: "var(--color-text-secondary)", marginTop: 2 }}>Output: <span style={{ color: "var(--color-green)" }}>{ex.o}</span></div>
+                                </div>
+                            ))}
+                            
+                            <div style={{ marginTop: 16 }}>
+                                <Btn variant="ghost" size="sm" onClick={() => setHintShown((s) => !s)} style={{ borderRadius: 4, fontSize: 10 }}>
+                                    💡 Toggle Hint
+                                </Btn>
+                                {hintShown && q.hints.map((h, i) => (
+                                    <div key={i} className="MONO bgP" style={{ border: "1px solid var(--border-purple)", padding: 12, marginTop: 10, fontSize: 12, color: "#e8d5ff", borderRadius: 4 }}>
+                                        {h}
                                     </div>
                                 ))}
+                            </div>
+                        </CyberCard>
+                    </div>
+
+                    {/* Right: Coding workspace */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <CyberCard style={{ padding: 0, overflow: "hidden" }} color="var(--color-yellow)">
+                            <div style={{ 
+                                padding: "12px 18px", 
+                                background: "rgba(250, 204, 21, 0.04)", 
+                                borderBottom: "1px solid rgba(250, 204, 21, 0.15)", 
+                                display: "flex", 
+                                gap: 10 
+                            }}>
+                                <div style={{ display: "flex", gap: 6 }}>
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-red)" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-yellow)" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-green)" }} />
+                                </div>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(250, 204, 21, 0.6)", letterSpacing: "0.15em", fontWeight: 600 }}>
+                                    DAILY_BREACH_{new Date().toISOString().slice(0, 10)}.js
+                                </span>
+                            </div>
+                            <CodeEditor value={code} onChange={setCode} height={310} />
+                        </CyberCard>
+                        
+                        <Btn variant={done ? "ghost" : "g"} onClick={run} disabled={running || done} style={{ justifyContent: "center" }}>
+                            {done ? "✓ SECURED FOR TODAY" : running ? "⏳ EVALUATING VECTORS..." : "▶ DEPLOY SOLUTION DECRYPT"}
+                        </Btn>
+                        
+                        {results && (
+                            <CyberCard style={{ padding: 14 }} color={results.every((r) => r.passed) ? "var(--color-green)" : "var(--color-red)"}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                                    {results.map((r, i) => (
+                                        <div key={i} style={{ 
+                                            display: "flex", 
+                                            justifyContent: "space-between", 
+                                            padding: "6px 0", 
+                                            borderBottom: "1px dashed rgba(255,255,255,0.06)",
+                                            alignItems: "center"
+                                        }}>
+                                            <span className="MONO" style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>{r.label}</span>
+                                            <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 12, fontWeight: 700 }}>
+                                                {r.passed ? "✓ PASS" : r.error ? `✗ ERROR` : `✗ FAIL`}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
                             </CyberCard>
                         )}
                     </div>

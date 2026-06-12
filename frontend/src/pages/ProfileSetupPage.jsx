@@ -9,14 +9,41 @@ const ACCS = ["⚡", "🔋", "🎮", "📡", "💎", "🌐", "🔩", "⚙️"];
 
 function PickRow({ label, items, sel, onSel }) {
     return (
-        <div style={{ marginBottom: 20 }}>
-            <div className="MONO" style={{ fontSize: 11, color: "rgba(0,212,255,.5)", marginBottom: 8, letterSpacing: ".15em" }}>{label}</div>
+        <div style={{ marginBottom: 24 }}>
+            <div className="MONO" style={{ fontSize: 11, color: "var(--color-text-secondary)", marginBottom: 10, letterSpacing: "0.15em", fontWeight: 600 }}>{label}</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {items.map((item, i) => (
-                    <div key={i} onClick={() => onSel(i)} style={{ width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, cursor: "pointer", border: sel === i ? "1px solid #00ff41" : "1px solid rgba(255,255,255,.1)", boxShadow: sel === i ? "0 0 10px rgba(0,255,65,.4)" : "none", background: sel === i ? "rgba(0,255,65,.1)" : "rgba(0,8,18,.9)", transition: "all .2s" }}>
-                        {item}
-                    </div>
-                ))}
+                {items.map((item, i) => {
+                    const active = sel === i;
+                    return (
+                        <div 
+                            key={i} 
+                            onClick={() => onSel(i)} 
+                            style={{ 
+                                width: 46, 
+                                height: 46, 
+                                display: "flex", 
+                                alignItems: "center", 
+                                justifyContent: "center", 
+                                fontSize: 24, 
+                                cursor: "pointer", 
+                                border: active ? "1px solid var(--color-green)" : "1px solid rgba(255,255,255,0.08)", 
+                                borderRadius: 4,
+                                boxShadow: active ? "0 0 12px rgba(0, 255, 157, 0.3)" : "none", 
+                                background: active ? "rgba(0, 255, 157, 0.1)" : "rgba(10, 13, 28, 0.6)", 
+                                transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                                transform: active ? "scale(1.05)" : "none"
+                            }}
+                            onMouseEnter={(e) => {
+                                if(!active) e.currentTarget.style.borderColor = "var(--color-cyan)";
+                            }}
+                            onMouseLeave={(e) => {
+                                if(!active) e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                            }}
+                        >
+                            {item}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
@@ -32,7 +59,10 @@ export default function ProfileSetupPage({ onComplete }) {
     const { saveProfile } = useUser();
 
     const submit = async () => {
-        if (username.trim().length < 3) { setErr("Username must be at least 3 characters"); return; }
+        if (username.trim().length < 3) { 
+            setErr("Username must be at least 3 characters"); 
+            return; 
+        }
         setLoading(true);
         try {
             const avatar = { face: FACES[face], outfit: OUTFITS[outfit], acc: ACCS[acc] };
@@ -46,34 +76,101 @@ export default function ProfileSetupPage({ onComplete }) {
     };
 
     return (
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, position: "relative" }}>
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
-            <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 600 }}>
-                <div className="ORB gG" style={{ fontSize: 24, fontWeight: 700, letterSpacing: ".15em", marginBottom: 4, textAlign: "center" }}>IDENTITY SETUP</div>
-                <div className="MONO" style={{ fontSize: 12, color: "rgba(0,212,255,.4)", textAlign: "center", marginBottom: 32, letterSpacing: ".2em" }}>CONFIGURE YOUR OPERATIVE PROFILE</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-                    <CyberCard style={{ padding: 24 }}>
-                        <div className="MONO" style={{ fontSize: 11, color: "rgba(0,212,255,.5)", marginBottom: 8, letterSpacing: ".15em" }}>CODENAME</div>
-                        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your codename..." />
-                        {err && <div className="MONO gR" style={{ fontSize: 11, marginTop: 8 }}>⚠ {err}</div>}
-                        <div style={{ marginTop: 16 }}>
-                            <PickRow label="AVATAR_FACE" items={FACES} sel={face} onSel={setFace} />
-                            <PickRow label="OUTFIT_MODULE" items={OUTFITS} sel={outfit} onSel={setOutfit} />
-                            <PickRow label="ACCESSORY_CHIP" items={ACCS} sel={acc} onSel={setAcc} />
+            
+            {/* Ambient glows */}
+            <div style={{ position: "absolute", width: 500, height: 500, background: "radial-gradient(circle, rgba(0, 255, 157, 0.04) 0%, transparent 70%)", zIndex: 1, pointerEvents: "none" }} />
+
+            <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 880 }}>
+                <div style={{ textAlign: "center", marginBottom: 40 }}>
+                    <h2 className="ORB gG" style={{ fontSize: 26, fontWeight: 700, letterSpacing: "0.2em", marginBottom: 8, textShadow: "0 0 15px var(--color-green-glow)" }}>
+                        IDENTITY SETUP
+                    </h2>
+                    <div className="MONO" style={{ fontSize: 12, color: "var(--color-text-muted)", letterSpacing: "0.25em" }}>
+                        CONFIGURE & DEPLOY OPERATIVE PROFILE MODULE
+                    </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 32 }}>
+                    
+                    {/* Setup Config Fields */}
+                    <CyberCard style={{ padding: 32 }} color="var(--color-cyan)">
+                        <div style={{ marginBottom: 24 }}>
+                            <label className="MONO" style={{ display: "block", fontSize: 11, color: "var(--color-text-secondary)", marginBottom: 8, letterSpacing: "0.15em", fontWeight: 600 }}>
+                                OPERATIVE CODENAME
+                            </label>
+                            <input 
+                                value={username} 
+                                onChange={(e) => { setUsername(e.target.value); setErr(""); }} 
+                                placeholder="Enter your hacker codename..." 
+                                maxLength={16}
+                            />
+                            {err && (
+                                <div className="MONO gR" style={{ fontSize: 11, marginTop: 8, background: "rgba(255, 45, 85, 0.05)", border: "1px solid rgba(255, 45, 85, 0.2)", padding: "8px 12px", borderRadius: 4 }}>
+                                    ⚠ {err}
+                                </div>
+                            )}
                         </div>
+                        
+                        <PickRow label="AVATAR CORE MODULE (FACE)" items={FACES} sel={face} onSel={setFace} />
+                        <PickRow label="TACTICAL SUIT MODULE (OUTFIT)" items={OUTFITS} sel={outfit} onSel={setOutfit} />
+                        <PickRow label="HARDWARE AUX CHIP (ACCESSORY)" items={ACCS} sel={acc} onSel={setAcc} />
                     </CyberCard>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
-                        <div className="aFloat">
-                            <div style={{ width: 160, height: 160, borderRadius: "50%", background: "rgba(0,15,30,.9)", border: "3px solid #00d4ff", boxShadow: "0 0 30px rgba(0,212,255,.5), 0 0 60px rgba(0,212,255,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 72 }}>
+
+                    {/* Preview Mainframe Display */}
+                    <CyberCard style={{ padding: 32, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }} color="var(--color-green)">
+                        <div className="MONO" style={{ fontSize: 10, color: "var(--color-text-muted)", letterSpacing: "0.2em", marginBottom: 32 }}>
+                            LIVE PROFILE SYNC READOUT
+                        </div>
+                        
+                        <div className="aFloat" style={{ position: "relative", marginBottom: 32 }}>
+                            {/* Outer spinning ring decoration */}
+                            <div style={{ position: "absolute", inset: -18, border: "1px dashed var(--color-green)", borderRadius: "50%", opacity: 0.35, animation: "spin 18s linear infinite" }} />
+                            
+                            <div style={{ 
+                                width: 170, 
+                                height: 170, 
+                                borderRadius: "50%", 
+                                background: "rgba(14, 18, 38, 0.9)", 
+                                border: "2px solid var(--color-green)", 
+                                boxShadow: "0 0 35px var(--color-green-glow), inset 0 0 20px rgba(0, 255, 157, 0.2)", 
+                                display: "flex", 
+                                alignItems: "center", 
+                                justifyContent: "center", 
+                                fontSize: 80,
+                                backdropFilter: "blur(8px)"
+                            }}>
                                 {FACES[face]}
                             </div>
                         </div>
-                        <div className="ORB gC" style={{ fontSize: 18, fontWeight: 700, letterSpacing: ".1em" }}>{username || "RECRUIT_???"}</div>
-                        <div style={{ display: "flex", gap: 8 }}><span style={{ fontSize: 24 }}>{OUTFITS[outfit]}</span><span style={{ fontSize: 24 }}>{ACCS[acc]}</span></div>
-                        <Btn variant="g" size="lg" onClick={submit} disabled={loading}>
-                            {loading ? "⏳ DEPLOYING..." : "⚡ DEPLOY IDENTITY"}
+
+                        <div className="ORB gG" style={{ fontSize: 22, fontWeight: 700, letterSpacing: "0.15em", marginBottom: 12 }}>
+                            {username || "RECRUIT_???"}
+                        </div>
+                        
+                        <div style={{ display: "flex", gap: 16, background: "rgba(255,255,255,0.03)", padding: "10px 24px", borderRadius: 20, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 40 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                <span style={{ fontSize: 10, color: "var(--color-text-muted)" }}>SUIT:</span>
+                                <span style={{ fontSize: 20 }}>{OUTFITS[outfit]}</span>
+                            </div>
+                            <div style={{ width: 1, background: "rgba(255,255,255,0.1)" }} />
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                <span style={{ fontSize: 10, color: "var(--color-text-muted)" }}>AUX:</span>
+                                <span style={{ fontSize: 20 }}>{ACCS[acc]}</span>
+                            </div>
+                        </div>
+
+                        <Btn 
+                            variant="g" 
+                            size="lg" 
+                            onClick={submit} 
+                            disabled={loading}
+                            style={{ width: "100%", justifyContent: "center" }}
+                        >
+                            {loading ? "⏳ SYNCING CONFIG..." : "⚡ DEPLOY CONSOLE PROFILE"}
                         </Btn>
-                    </div>
+                    </CyberCard>
                 </div>
             </div>
         </div>

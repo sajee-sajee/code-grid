@@ -6,25 +6,62 @@ export default function MatrixRain() {
         const canvas = ref.current;
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
-        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
         resize();
         window.addEventListener("resize", resize);
-        const chars = "アイウエオカキクケコ01ﾅﾆﾇﾈﾉABCDEF<>{}[]|#$%@";
-        const cols = Math.floor(canvas.width / 18);
-        const drops = Array(cols).fill(1);
+        
+        const chars = "01ﾅﾆﾇﾈﾉABCDEF<>{}[]|#$%@アイウエオカキクケコ";
+        const charArray = chars.split("");
+        
+        // Setup multi-layered drop particles with dynamic speeds, sizes and opacities for depth (3D grid feel)
+        const colWidth = 22;
+        const cols = Math.max(20, Math.floor(window.innerWidth / colWidth));
+        const drops = Array.from({ length: cols }, (_, i) => ({
+            x: i * colWidth + (Math.random() * 6 - 3),
+            y: Math.random() * -window.innerHeight,
+            speed: 1.2 + Math.random() * 2.5,
+            size: 9 + Math.random() * 9,
+            opacity: 0.08 + Math.random() * 0.25
+        }));
+
         const draw = () => {
-            ctx.fillStyle = "rgba(3,3,8,0.05)";
+            // Apply trail fade effect
+            ctx.fillStyle = "rgba(5, 6, 15, 0.07)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            drops.forEach((y, i) => {
-                ctx.fillStyle = i % 3 === 0 ? "#00ff41" : i % 3 === 1 ? "rgba(0,212,255,0.6)" : "rgba(0,255,65,0.3)";
-                ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 18, y * 18);
-                if (y * 18 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
+            
+            drops.forEach((drop) => {
+                const char = charArray[Math.floor(Math.random() * charArray.length)];
+                
+                // Cyan and green mix matching the main color scheme
+                if (Math.random() > 0.85) {
+                    ctx.fillStyle = `rgba(0, 255, 157, ${drop.opacity * 1.5})`;
+                } else {
+                    ctx.fillStyle = `rgba(0, 229, 255, ${drop.opacity})`;
+                }
+                
+                ctx.font = `${drop.size}px 'Share Tech Mono', monospace`;
+                ctx.fillText(char, drop.x, drop.y);
+                
+                if (drop.y > canvas.height) {
+                    drop.y = Math.random() * -120;
+                    drop.speed = 1.2 + Math.random() * 2.5;
+                    drop.size = 9 + Math.random() * 9;
+                    drop.opacity = 0.08 + Math.random() * 0.25;
+                } else {
+                    drop.y += drop.speed;
+                }
             });
         };
-        ctx.font = "14px 'Share Tech Mono',monospace";
-        const id = setInterval(draw, 50);
-        return () => { clearInterval(id); window.removeEventListener("resize", resize); };
+        
+        const id = setInterval(draw, 33);
+        return () => {
+            clearInterval(id);
+            window.removeEventListener("resize", resize);
+        };
     }, []);
-    return <canvas ref={ref} style={{ position: "fixed", top: 0, left: 0, zIndex: 0, opacity: 0.35 }} />;
+    return <canvas ref={ref} style={{ position: "fixed", top: 0, left: 0, zIndex: 0, pointerEvents: "none", opacity: 0.5 }} />;
 }
