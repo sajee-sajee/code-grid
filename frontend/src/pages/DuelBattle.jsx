@@ -114,94 +114,193 @@ export default function DuelBattle({ user, duelConfig, onDuelEnd }) {
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    const timerColor = timeLeft < 30 ? "var(--red)" : timeLeft < 60 ? "var(--yellow)" : "var(--green)";
+    const timerColor = timeLeft < 30 ? "var(--color-red)" : timeLeft < 60 ? "var(--color-yellow)" : "var(--color-green)";
     const circumference = 2 * Math.PI * 45;
 
     return (
-        <div style={{ minHeight: "100vh", padding: 16, maxWidth: 1300, margin: "0 auto" }}>
+        <div style={{ minHeight: "100vh", padding: 20, maxWidth: 1350, margin: "0 auto", position: "relative" }}>
             <div className="bg-grid" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
+            
             <div style={{ position: "relative", zIndex: 1 }}>
-                {/* Header */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1 }}>
-                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(var(--bg-panel-rgb),.9)", border: "2px solid var(--green)", boxShadow: "0 0 15px rgba(var(--green-rgb),.5)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <AvatarView avatar={user.avatar} size={50} />
+                
+                {/* HUD Top Header Battle Metrics */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 16 }}>
+                    
+                    {/* Player Stats */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, minWidth: 200 }}>
+                        <div className="avatar-ring" style={{ 
+                            width: 54, 
+                            height: 54, 
+                            border: "2px solid var(--color-green)", 
+                            boxShadow: "0 0 15px rgba(0, 255, 157, 0.4)", 
+                            borderRadius: "50%",
+                            overflow: "hidden",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}>
+                            <AvatarView avatar={user.avatar} size={54} />
                         </div>
                         <div>
-                            <div className="ORB gG" style={{ fontSize: 14, fontWeight: 700 }}>{user.username}</div>
-                            <div className="MONO gG" style={{ fontSize: 20, fontWeight: 700 }}>{playerScore}</div>
+                            <div className="ORB gG" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.1em" }}>{user.username.toUpperCase()}</div>
+                            <div className="MONO gG" style={{ fontSize: 22, fontWeight: 800, textShadow: "0 0 10px rgba(0, 255, 157, 0.3)", marginTop: 2 }}>{playerScore} PTS</div>
                         </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                    
+                    {/* SVG Countdown Timer Ring */}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                         <div style={{ position: "relative", width: 100, height: 100 }}>
                             <svg width={100} height={100} style={{ transform: "rotate(-90deg)" }}>
-                                <circle cx={50} cy={50} r={45} fill="none" stroke="rgba(var(--white-rgb),.1)" strokeWidth={6} />
-                                <circle cx={50} cy={50} r={45} fill="none" stroke={timerColor} strokeWidth={6} strokeDasharray={circumference} strokeDashoffset={circumference * (1 - timeLeft / 180)} style={{ transition: "stroke-dashoffset 1s linear, stroke .5s", filter: `drop-shadow(0 0 6px ${timerColor})` }} />
+                                <circle cx={50} cy={50} r={45} fill="none" stroke="rgba(255, 255, 255, 0.04)" strokeWidth={5} />
+                                <circle 
+                                    cx={50} 
+                                    cy={50} 
+                                    r={45} 
+                                    fill="none" 
+                                    stroke={timerColor} 
+                                    strokeWidth={5} 
+                                    strokeDasharray={circumference} 
+                                    strokeDashoffset={circumference * (1 - timeLeft / 180)} 
+                                    style={{ transition: "stroke-dashoffset 1s linear, stroke 0.5s", filter: `drop-shadow(0 0 8px ${timerColor})` }} 
+                                />
                             </svg>
                             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <div className="ORB" style={{ fontSize: 18, fontWeight: 700, color: timerColor, textShadow: `0 0 10px ${timerColor}` }}>
+                                <div className="ORB" style={{ fontSize: 18, fontWeight: 800, color: timerColor, textShadow: `0 0 10px ${timerColor}55` }}>
                                     {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
                                 </div>
                             </div>
                         </div>
-                        <div className="MONO" style={{ fontSize: 10, color: "rgba(var(--text-muted-rgb),.4)", letterSpacing: ".2em" }}>⚔️ VS CPU</div>
+                        <div className="MONO" style={{ fontSize: 9, color: "var(--color-text-muted)", letterSpacing: "0.2em" }}>SYSTEM TIMEOUT</div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, justifyContent: "flex-end" }}>
-                        <div>
-                            <div className="ORB gR" style={{ fontSize: 14, fontWeight: 700, textAlign: "right" }}>NEXUS-7 AI</div>
-                            <div className="MONO gR" style={{ fontSize: 20, fontWeight: 700, textAlign: "right" }}>{cpuDone ? cpuScore : "?"}</div>
-                        </div>
-                        <div style={{ width: 50, height: 50, borderRadius: "50%", background: "rgba(30,0,8,.9)", border: "2px solid var(--red)", boxShadow: "0 0 15px rgba(var(--red-rgb),.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>🤖</div>
-                    </div>
-                </div>
-                {/* CPU Progress */}
-                <div style={{ marginBottom: 16 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.4)" }}>CPU ANALYSIS PROGRESS</span>
-                        <span className="MONO gR" style={{ fontSize: 11 }}>{cpuDone ? "SOLVED ✓" : `${Math.floor(cpuProgress)}%`}</span>
-                    </div>
-                    <div style={{ height: 4, background: "rgba(var(--white-rgb),.06)" }}>
-                        <div style={{ width: `${cpuProgress}%`, height: "100%", background: "linear-gradient(90deg,#400010,var(--red))", transition: "width .5s" }} />
-                    </div>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                    <CyberCard style={{ padding: 24 }} color="var(--red)">
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                            <div className="ORB" style={{ fontSize: 16, color: "#e0e8f0" }}>{q.title}</div>
-                            <span className={`badge-${q.diff === "Easy" ? "e" : q.diff === "Medium" ? "m" : "h"}`}>{q.diff}</span>
-                        </div>
-                        <div className="MONO" style={{ fontSize: 13, color: "rgba(var(--text-muted-rgb),.8)", lineHeight: 1.8, whiteSpace: "pre-line", marginBottom: 12 }}>{q.desc}</div>
-                        {q.examples.slice(0, 2).map((ex, i) => (
-                            <div key={i} style={{ background: "rgba(30,0,8,.6)", border: "1px solid rgba(var(--red-rgb),.15)", padding: 10, marginBottom: 8 }}>
-                                <div className="MONO" style={{ fontSize: 11, color: "rgba(var(--red-rgb),.5)" }}>Example {i + 1}</div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>In: <span style={{ color: "var(--yellow)" }}>{ex.i}</span></div>
-                                <div className="MONO" style={{ fontSize: 12, color: "rgba(var(--text-muted-rgb),.7)" }}>Out: <span style={{ color: "var(--green)" }}>{ex.o}</span></div>
+                    
+                    {/* CPU Stats */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, justifyContent: "flex-end", minWidth: 200 }}>
+                        <div style={{ textAlign: "right" }}>
+                            <div className="ORB gR" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.1em" }}>NEXUS-7 AI</div>
+                            <div className="MONO gR" style={{ fontSize: 22, fontWeight: 800, textShadow: "0 0 10px rgba(255, 45, 85, 0.3)", marginTop: 2 }}>
+                                {cpuDone ? `${cpuScore} PTS` : "ANALYZING..."}
                             </div>
-                        ))}
-                    </CyberCard>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                        <CyberCard style={{ padding: 0, overflow: "hidden" }}>
-                            <div style={{ padding: "10px 16px", background: "rgba(var(--red-rgb),.04)", borderBottom: "1px solid rgba(var(--red-rgb),.2)", display: "flex", gap: 8, alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: 6 }}><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--red)" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--yellow)" }} /><div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--green)" }} /></div>
-                                <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--red-rgb),.5)", letterSpacing: ".15em" }}>DUEL_BATTLE.{getFileExtension(language)}</span>
+                        </div>
+                        <div className="avatar-ring" style={{ 
+                            width: 54, 
+                            height: 54, 
+                            border: "2px solid var(--color-red)", 
+                            boxShadow: "0 0 15px rgba(255, 45, 85, 0.4)", 
+                            fontSize: 26,
+                            background: "rgba(30, 0, 8, 0.9)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "50%",
+                            overflow: "hidden"
+                        }}>
+                            🤖
+                        </div>
+                    </div>
+                </div>
+
+                {/* CPU Progress Bar Row */}
+                <CyberCard style={{ padding: "12px 20px", marginBottom: 24 }} color="var(--color-red)">
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, alignItems: "center" }}>
+                        <span className="MONO" style={{ fontSize: 10, color: "var(--color-text-muted)", letterSpacing: "0.12em", fontWeight: 600 }}>NEXUS-7 COGNITIVE RESOLUTION RATIO</span>
+                        <span className="MONO gR" style={{ fontSize: 11, fontWeight: 700 }}>{cpuDone ? "TARGET SOLVED ✓" : `${Math.floor(cpuProgress)}% RESOLVED`}</span>
+                    </div>
+                    <div style={{ height: 6, background: "rgba(255, 255, 255, 0.04)", borderRadius: 3, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ width: `${cpuProgress}%`, height: "100%", background: "linear-gradient(90deg, #4d0016, var(--color-red))", boxShadow: "0 0 8px var(--color-red)", transition: "width 0.5s ease" }} />
+                    </div>
+                </CyberCard>
+
+                {/* Interactive splitscreen panels */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: 20 }}>
+                    
+                    {/* Left: Combat question brief */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <CyberCard style={{ padding: 24 }} color="var(--color-red)">
+                            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                                <h3 className="ORB" style={{ fontSize: 17, color: "var(--color-text-primary)" }}>{q.title}</h3>
+                                <span className={`badge-${q.diff === "Easy" ? "e" : q.diff === "Medium" ? "m" : "h"}`}>{q.diff}</span>
+                            </div>
+                            
+                            <p className="MONO" style={{ 
+                                fontSize: 13, 
+                                color: "var(--color-text-secondary)", 
+                                lineHeight: 1.7, 
+                                whiteSpace: "pre-line", 
+                                marginBottom: 20,
+                                paddingBottom: 16,
+                                borderBottom: "1px dashed rgba(255,255,255,0.06)"
+                            }}>
+                                {q.desc}
+                            </p>
+                            
+                            {q.examples.slice(0, 2).map((ex, i) => (
+                                <div key={i} style={{ 
+                                    background: "rgba(30, 0, 8, 0.4)", 
+                                    border: "1px solid rgba(255, 45, 85, 0.1)", 
+                                    padding: 14, 
+                                    marginBottom: 10,
+                                    borderRadius: 4
+                                }}>
+                                    <div className="MONO" style={{ fontSize: 10, color: "var(--color-red)", marginBottom: 6, fontWeight: 600 }}>EXAMPLE_NODE_0{i + 1}</div>
+                                    <div className="MONO" style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>Input: <span style={{ color: "var(--color-yellow)" }}>{ex.i}</span></div>
+                                    <div className="MONO" style={{ fontSize: 12, color: "var(--color-text-secondary)", marginTop: 2 }}>Output: <span style={{ color: "var(--color-green)" }}>{ex.o}</span></div>
+                                </div>
+                            ))}
+                        </CyberCard>
+                    </div>
+
+                    {/* Right: Code area */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <CyberCard style={{ padding: 0, overflow: "hidden" }} color="var(--color-red)">
+                            <div style={{ 
+                                padding: "12px 18px", 
+                                background: "rgba(255, 45, 85, 0.04)", 
+                                borderBottom: "1px solid rgba(255, 45, 85, 0.15)", 
+                                display: "flex", 
+                                gap: 10 
+                            }}>
+                                <div style={{ display: "flex", gap: 6 }}>
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-red)" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-yellow)" }} />
+                                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: "var(--color-green)" }} />
+                                </div>
+                                <span className="MONO" style={{ fontSize: 11, color: "rgba(255, 45, 85, 0.6)", letterSpacing: "0.15em", fontWeight: 600 }}>
+                                    ARENA_DECRYPT_STREAM.{getFileExtension(language)}
+                                </span>
                                 <div style={{ marginLeft: "auto" }}>
                                     <LanguagePicker value={language} onChange={handleLanguageChange} />
                                 </div>
                             </div>
-                            <CodeEditor value={code} onChange={updateCode} height={240} />
+                            <CodeEditor value={code} onChange={updateCode} height={310} />
                         </CyberCard>
-                        <Btn variant="ghost" size="sm" onClick={() => { updateCode(starterMap[language]); setResults(null); }} style={{ alignSelf: "flex-end" }}>↺ RESET</Btn>
-                        <Btn variant="r" onClick={run} disabled={running || finished} style={{ justifyContent: "center" }}>
-                            {finished ? "⚔️ BATTLE ENDED" : running ? "⏳ EXECUTING..." : "▶ SUBMIT ANSWER"}
-                        </Btn>
+                        
+                        <div style={{ display: "flex", gap: 12 }}>
+                            <Btn variant="r" onClick={run} disabled={running || finished} style={{ flex: 1, justifyContent: "center" }}>
+                                {finished ? "⚔️ DUEL COMPLETED" : running ? "⏳ INITIATING DECRYPT ENGINE..." : "▶ TRANSMIT BREACH SOLUTION"}
+                            </Btn>
+                            <Btn variant="ghost" size="sm" onClick={() => { updateCode(starterMap[language]); setResults(null); }} style={{ borderRadius: 4 }}>
+                                ↺ RESET
+                            </Btn>
+                        </div>
+                        
                         {results && (
-                            <CyberCard style={{ padding: 12 }} color={results.every((r) => r.passed) ? "var(--green)" : "var(--red)"}>
-                                {results.map((r, i) => (
-                                    <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0" }}>
-                                        <span className="MONO" style={{ fontSize: 11, color: "rgba(var(--text-muted-rgb),.5)" }}>{r.label}</span>
-                                        <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 11 }}>{r.passed ? "✓" : r.error ? "Error" : `Got ${r.output}`}</span>
-                                    </div>
-                                ))}
+                            <CyberCard style={{ padding: 14 }} color={results.every((r) => r.passed) ? "var(--color-green)" : "var(--color-red)"}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                                    {results.map((r, i) => (
+                                        <div key={i} style={{ 
+                                            display: "flex", 
+                                            justifyContent: "space-between", 
+                                            padding: "6px 0", 
+                                            borderBottom: "1px dashed rgba(255,255,255,0.06)",
+                                            alignItems: "center"
+                                        }}>
+                                            <span className="MONO" style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>{r.label}</span>
+                                            <span className={`MONO ${r.passed ? "gG" : "gR"}`} style={{ fontSize: 12, fontWeight: 700 }}>
+                                                {r.passed ? "✓ PASS" : r.error ? `✗ ERROR` : `✗ FAIL`}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
                             </CyberCard>
                         )}
                     </div>

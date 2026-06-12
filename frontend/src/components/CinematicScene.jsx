@@ -84,6 +84,37 @@ export default function CinematicScene({ sceneId, onSkip }) {
         return () => cancelAnimationFrame(raf);
     }, [sceneId]);
 
+    const renderContent = (val, isBg) => {
+        const isImg = typeof val === "string" && (val.endsWith(".png") || val.includes("/assests/"));
+        if (isImg) {
+            return (
+                <img 
+                    src={val} 
+                    style={{ 
+                        width: isBg ? "min(80vw, 80vh)" : "min(40vw, 40vh)", 
+                        height: isBg ? "min(80vw, 80vh)" : "min(40vw, 40vh)", 
+                        objectFit: "contain",
+                        opacity: isBg ? 0.08 : 0.28, 
+                        animation: isBg ? scene.bgAnim : scene.fgAnim, 
+                        filter: isBg ? `blur(2px) drop-shadow(0 0 80px ${scene.accentColor})` : `drop-shadow(0 0 40px ${scene.accentColor})` 
+                    }} 
+                    alt="" 
+                />
+            );
+        }
+        return (
+            <div style={{ 
+                fontSize: isBg ? "min(40vw, 40vh)" : "min(20vw, 22vh)", 
+                opacity: isBg ? 0.06 : 0.22, 
+                animation: isBg ? scene.bgAnim : scene.fgAnim, 
+                filter: isBg ? `blur(2px) drop-shadow(0 0 80px ${scene.accentColor})` : `drop-shadow(0 0 40px ${scene.accentColor})`,
+                transformOrigin: "center center" 
+            }}>
+                {val}
+            </div>
+        );
+    };
+
     return (
         <div
             onClick={onSkip}
