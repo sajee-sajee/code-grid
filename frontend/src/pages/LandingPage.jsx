@@ -23,35 +23,7 @@ export default function LandingPage({ onNav }) {
 
             <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: 24, maxWidth: 850, width: "100%" }}>
 
-                {/* Visual Header Node */}
-                <div className="aFloat" style={{ marginBottom: 32, display: "inline-flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
-                    <div style={{
-                        width: 90,
-                        height: 90,
-                        borderRadius: "50%",
-                        background: "rgba(10, 13, 28, 0.8)",
-                        border: "1px solid var(--border-cyan)",
-                        boxShadow: "0 0 30px var(--color-cyan-glow), inset 0 0 15px rgba(0, 229, 255, 0.2)",
-                        display: "flex",
-                        alignItems: "center",
-                        justify: "center",
-                        backdropFilter: "blur(12px)",
-                        overflow: "hidden"
-                    }}>
-                        <img 
-                            src="/assests/eye.jpg" 
-                            style={{ 
-                                width: "100%", 
-                                height: "100%", 
-                                objectFit: "cover", 
-                                borderRadius: "50%" 
-                            }} 
-                            alt="Cyber Eye" 
-                        />
-                    </div>
-                    {/* Ring orbit decorative line */}
-                    <div style={{ position: "absolute", inset: -10, border: "1px dashed rgba(0, 229, 255, 0.15)", borderRadius: "50%", animation: "spin 25s linear infinite" }} />
-                </div>
+
 
                 <h1 className="ORB aGlitch" style={{
                     fontSize: "clamp(32px, 6vw, 64px)",
