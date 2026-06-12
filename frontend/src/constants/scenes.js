@@ -1,11 +1,13 @@
+import BgScene01 from "../public/assests/BgScene01.png";
+
 export const SCENES = {
     0: {
         id: 0,
         title: "GLOBAL NETWORK BREACH",
         bgColor: "linear-gradient(180deg, #000510 0%, #001828 40%, #000a14 100%)",
-        bgEmoji: "🌃",
+        bgEmoji: "frontend/public/assests/BgScene01.png",
         bgAnim: "sceneBgPanLeft 7s ease-in-out infinite alternate",
-        fgEmoji: "💻",
+        fgEmoji: FgScene01,
         fgAnim: "sceneFgFloat 4s ease-in-out infinite",
         accentColor: "#00d4ff",
         glowColor: "rgba(0,212,255,0.3)",
