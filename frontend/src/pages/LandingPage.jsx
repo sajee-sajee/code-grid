@@ -58,7 +58,7 @@ export default function LandingPage({ onNav }) {
                 </p>
 
                 <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap", marginBottom: 64 }}>
-                    <Btn variant="g" size="lg" onClick={() => onNav("signup")}>⚡ Enlist Now</Btn>
+                    <Btn variant="g" size="lg" onClick={() => onNav("signup")}>Enlist Now</Btn>
                     <Btn variant="ghost" size="lg" onClick={() => onNav("login")}>▶ Access Terminal</Btn>
                 </div>
 
